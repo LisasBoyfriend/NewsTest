@@ -18,6 +18,7 @@ import com.yang.newstest.fragment.FragmentWode;
 import com.yang.newstest.fragment.FragmentYinshipin;
 import com.yang.newstest.fragment.FragmentZhuanti;
 import com.yang.newstest.fragment.FragmentZixun;
+import com.yang.newstest.utils.URLUtils;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -28,11 +29,13 @@ public class MainActivity extends AppCompatActivity {
     private List<Fragment> fragments;
     BottomNavigationView bottomNavigationView;
 
+    String result = "";
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         Window window = this.getWindow();
-        window.getDecorView().setSystemUiVisibility(View.SYSTEM_UI_FLAG_LAYOUT_STABLE |View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN);
+        window.getDecorView().setSystemUiVisibility(View.SYSTEM_UI_FLAG_LAYOUT_STABLE | View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN);
         window.setStatusBarColor(Color.TRANSPARENT);
         setContentView(R.layout.activity_main);
         initView();
@@ -46,13 +49,19 @@ public class MainActivity extends AppCompatActivity {
 
         initBna(bottomNavigationView);
         initViewPager(viewPager);
+
+        initNewsData();
+    }
+
+    private void initNewsData() {
+        result = URLUtils.getHttpResponse(URLUtils.HTTP_URL);
     }
 
     private void initBna(BottomNavigationView bottomNavigationView) {
         bottomNavigationView.setOnNavigationItemSelectedListener(new BottomNavigationView.OnNavigationItemSelectedListener() {
             @Override
             public boolean onNavigationItemSelected(@NonNull MenuItem item) {
-                switch (item.getItemId()){
+                switch (item.getItemId()) {
                     case R.id.bottom_nav_zixun:
                         viewPager.setCurrentItem(0, false);
                         break;
@@ -71,19 +80,19 @@ public class MainActivity extends AppCompatActivity {
         });
     }
 
-    public void initView(){
+    public void initView() {
         viewPager = findViewById(R.id.activity_main_viewpager);
         bottomNavigationView = findViewById(R.id.activity_main_bna);
     }
 
-    public void initFragmentData(List<Fragment> fragments){
+    public void initFragmentData(List<Fragment> fragments) {
         fragments.add(new FragmentZixun());
         fragments.add(new FragmentYinshipin());
         fragments.add(new FragmentZhuanti());
         fragments.add(new FragmentWode());
     }
 
-    public void initViewPager(ViewPager viewPager){
+    public void initViewPager(ViewPager viewPager) {
         viewPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
             @Override
             public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
