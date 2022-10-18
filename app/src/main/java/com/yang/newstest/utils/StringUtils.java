@@ -8,20 +8,20 @@ import java.io.InputStreamReader;
 public class StringUtils {
 
 
-    public static String convertInputStream(InputStream is){
+    public static String convertInputStream(InputStream is) {
         BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(is));
         String line = "";
         StringBuilder stringBuilder = new StringBuilder();
         String response = "";
-        while (true){
-            try {
-                if ((line = bufferedReader.readLine()) == null) break;
-            } catch (IOException e) {
-                e.printStackTrace();
+        try{
+            while ((line = bufferedReader.readLine()) != null){
+                stringBuilder.append(line);
             }
-            stringBuilder.append(line);
+        }catch (Exception e){
+            e.printStackTrace();
         }
-        response = stringBuilder.toString().trim();
+
+        response = stringBuilder.toString();
         return response;
 
     }

@@ -1,6 +1,7 @@
 package com.yang.newstest.bean;
 
 import java.util.List;
+
 //获取新闻后的实体类
 public class NewsBean {
     private List<?> channels;

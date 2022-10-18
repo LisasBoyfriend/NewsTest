@@ -7,19 +7,28 @@ import androidx.viewpager.widget.ViewPager;
 
 import android.graphics.Color;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Message;
+import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
 
 import com.google.android.material.bottomnavigation.BottomNavigationView;
+import com.google.gson.Gson;
 import com.yang.newstest.adapter.MainFraAdapter;
+import com.yang.newstest.bean.NewsBean;
 import com.yang.newstest.fragment.FragmentWode;
 import com.yang.newstest.fragment.FragmentYinshipin;
 import com.yang.newstest.fragment.FragmentZhuanti;
 import com.yang.newstest.fragment.FragmentZixun;
+import com.yang.newstest.utils.StringUtils;
 import com.yang.newstest.utils.URLUtils;
 
+import java.io.InputStream;
+import java.net.HttpURLConnection;
+import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -29,7 +38,8 @@ public class MainActivity extends AppCompatActivity {
     private List<Fragment> fragments;
     BottomNavigationView bottomNavigationView;
 
-    String result = "";
+    MyHandler handler = new MyHandler();
+    MyRunnable myRunnable = new MyRunnable();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -50,12 +60,11 @@ public class MainActivity extends AppCompatActivity {
         initBna(bottomNavigationView);
         initViewPager(viewPager);
 
-        initNewsData();
+        new Thread(myRunnable).start();
+
+
     }
 
-    private void initNewsData() {
-        result = URLUtils.getHttpResponse(URLUtils.HTTP_URL);
-    }
 
     private void initBna(BottomNavigationView bottomNavigationView) {
         bottomNavigationView.setOnNavigationItemSelectedListener(new BottomNavigationView.OnNavigationItemSelectedListener() {
@@ -110,5 +119,54 @@ public class MainActivity extends AppCompatActivity {
 
             }
         });
+    }
+
+
+
+    class MyHandler extends Handler {
+
+        @Override
+        public void handleMessage(@NonNull Message msg) {
+
+            super.handleMessage(msg);
+            Bundle data = msg.getData();
+            String value = data.getString("value");
+
+            NewsBean newsBean = new Gson().fromJson(value, NewsBean.class);
+            Log.i("MainActivity", "handleMessage: " + value);
+            Log.i("MainActivity", "handleMessage: " + newsBean.getDocs().getList().get(1).getAuthor());
+
+        }
+    }
+
+    class MyRunnable implements Runnable{
+        StringBuilder stringBuilder = new StringBuilder();
+
+        String url = URLUtils.HTTP_URL;
+
+        @Override
+        public void run() {
+            try {
+                if (url != null) {
+                    URL mUrl = new URL(url);
+                    HttpURLConnection urlConnection = (HttpURLConnection) mUrl.openConnection();
+                    urlConnection.setRequestMethod("GET");
+                    urlConnection.connect();
+                    int responseCode = urlConnection.getResponseCode();
+                    if (responseCode == HttpURLConnection.HTTP_OK) {
+                        InputStream inputStream = urlConnection.getInputStream();
+                        stringBuilder.append(StringUtils.convertInputStream(inputStream));
+                        String result = stringBuilder.toString();
+                        Message message = new Message();
+                        Bundle data = new Bundle();
+                        data.putString("value", result);
+                        message.setData(data);
+                        handler.sendMessage(message);
+                    }
+                }
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
     }
 }
