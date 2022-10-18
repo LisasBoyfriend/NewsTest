@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <item android:id="@+id/bottom_nav_zixun"
+        android:icon="@mipmap/zixun"
+        android:title="@string/zixun"/>
+    <item android:id="@+id/bottom_nav_yinshipin"
+        android:icon="@mipmap/yinshipin"
+        android:title="@string/yinshipin"/>
+    <item android:id="@+id/bottom_nav_zhuanti"
+        android:icon="@mipmap/zhuanti"
+        android:title="@string/zhuanti"/>
+    <item android:id="@+id/bittom_nav_wode"
+        android:icon="@mipmap/wode"
+        android:title="@string/wode"/>
+</menu>

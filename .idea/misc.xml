@@ -3,11 +3,20 @@
   <component name="DesignSurface">
     <option name="filePathToZoomLevelMap">
       <map>
+        <entry key="..\:/AndroidWorkspace/NewsTest/app/src/main/res/drawable/selector_wode.xml" value="0.253125" />
+        <entry key="..\:/AndroidWorkspace/NewsTest/app/src/main/res/drawable/selector_yinshipin.xml" value="0.253125" />
+        <entry key="..\:/AndroidWorkspace/NewsTest/app/src/main/res/drawable/selector_zhuanti.xml" value="0.253125" />
+        <entry key="..\:/AndroidWorkspace/NewsTest/app/src/main/res/drawable/selector_zixun.xml" value="0.253125" />
         <entry key="..\:/AndroidWorkspace/NewsTest/app/src/main/res/layout/activity_main.xml" value="0.22418478260869565" />
+        <entry key="..\:/AndroidWorkspace/NewsTest/app/src/main/res/layout/fragment_wode.xml" value="0.11927083333333334" />
+        <entry key="..\:/AndroidWorkspace/NewsTest/app/src/main/res/layout/fragment_yinshipin.xml" value="0.11927083333333334" />
+        <entry key="..\:/AndroidWorkspace/NewsTest/app/src/main/res/layout/fragment_zhuanti.xml" value="0.11927083333333334" />
+        <entry key="..\:/AndroidWorkspace/NewsTest/app/src/main/res/layout/fragment_zixun.xml" value="0.11927083333333334" />
         <entry key="..\:/AndroidWorkspace/NewsTest/app/src/main/res/layout/item_news_1.xml" value="0.264" />
         <entry key="..\:/AndroidWorkspace/NewsTest/app/src/main/res/layout/item_news_2.xml" value="0.23697916666666666" />
-        <entry key="..\:/AndroidWorkspace/NewsTest/app/src/main/res/layout/item_news_3.xml" value="0.2" />
-        <entry key="..\:/AndroidWorkspace/NewsTest/app/src/main/res/layout/item_news_4.xml" value="0.2" />
+        <entry key="..\:/AndroidWorkspace/NewsTest/app/src/main/res/layout/item_news_3.xml" value="0.536" />
+        <entry key="..\:/AndroidWorkspace/NewsTest/app/src/main/res/layout/item_news_4.xml" value="0.536" />
+        <entry key="..\:/AndroidWorkspace/NewsTest/app/src/main/res/menu/activity_bottom_nav.xml" value="0.23697916666666666" />
       </map>
     </option>
   </component>

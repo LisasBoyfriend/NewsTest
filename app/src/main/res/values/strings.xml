@@ -1,3 +1,7 @@
 <resources>
     <string name="app_name">NewsTest</string>
+    <string name="zixun">资讯</string>
+    <string name="yinshipin">音视频</string>
+    <string name="zhuanti">专题</string>
+    <string name="wode">我的</string>
 </resources>
