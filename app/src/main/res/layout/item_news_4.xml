@@ -3,30 +3,49 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="170dp"
+    android:layout_height="240dp"
+    android:background="@color/white"
     android:padding="10dp">
 
     <TextView
         android:id="@+id/tv_news_title"
-        android:layout_width="wrap_content"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginStart="10dp"
-        android:layout_marginEnd="10dp"
-        android:gravity="left"
+        android:layout_marginStart="5dp"
+        android:layout_marginEnd="5dp"
+        android:paddingTop="5dp"
         android:text="这是一段示例新闻标题,习近平参加党的二十大广西代表团"
         android:textColor="@color/black"
-        android:textSize="17sp"
+        android:textSize="16sp"
+        app:layout_constraintBottom_toTopOf="@+id/iv_news_image"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.444" />
+
+    <ImageView
+        android:id="@+id/iv_news_image"
+        android:layout_width="match_parent"
+        android:layout_height="130dp"
+        android:padding="5dp"
+        android:paddingTop="10dp"
+        android:scaleType="centerCrop"
+        android:src="@mipmap/news_demo"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.842"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.677" />
 
     <TextView
         android:id="@+id/tv_news_author"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginStart="5dp"
         android:text="作者"
         android:textColor="@color/grey"
-        android:textSize="14sp"
+        android:textSize="13sp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent" />
 
@@ -37,7 +56,7 @@
         android:layout_marginStart="10dp"
         android:text="发布时间"
         android:textColor="@color/grey"
-        android:textSize="14sp"
+        android:textSize="13sp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toEndOf="@+id/tv_news_author" />
 
@@ -45,54 +64,8 @@
         android:id="@+id/iv_news_turn_on"
         android:layout_width="25dp"
         android:layout_height="25dp"
+        android:layout_marginEnd="5dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:srcCompat="@mipmap/title_horn" />
-
-    <ImageView
-        android:id="@+id/iv_news_image1"
-        android:layout_width="0dp"
-        android:layout_height="70dp"
-        android:padding="5dp"
-        android:scaleType="fitXY"
-        app:layout_constraintBottom_toTopOf="@+id/guideline2"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.5"
-        app:layout_constraintHorizontal_weight="1"
-        app:layout_constraintStart_toEndOf="@+id/iv_news_image2"
-        app:srcCompat="@mipmap/sucai3" />
-
-    <ImageView
-        android:id="@+id/iv_news_image2"
-        android:layout_width="0dp"
-        android:layout_height="70dp"
-        android:padding="5dp"
-        android:scaleType="fitXY"
-        app:layout_constraintBottom_toTopOf="@+id/guideline2"
-        app:layout_constraintEnd_toStartOf="@+id/iv_news_image1"
-        app:layout_constraintHorizontal_bias="0.5"
-        app:layout_constraintHorizontal_weight="1"
-        app:layout_constraintStart_toEndOf="@+id/iv_news_image3"
-        app:srcCompat="@mipmap/sucai2" />
-
-    <ImageView
-        android:id="@+id/iv_news_image3"
-        android:layout_width="0dp"
-        android:layout_height="70dp"
-        android:padding="5dp"
-        android:scaleType="fitXY"
-        app:layout_constraintBottom_toTopOf="@+id/guideline2"
-        app:layout_constraintEnd_toStartOf="@+id/iv_news_image2"
-        app:layout_constraintHorizontal_bias="0.5"
-        app:layout_constraintHorizontal_chainStyle="spread_inside"
-        app:layout_constraintHorizontal_weight="1"
-        app:layout_constraintStart_toStartOf="parent"
-        app:srcCompat="@mipmap/sucai1" />
-
-    <androidx.constraintlayout.widget.Guideline
-        android:id="@+id/guideline2"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        app:layout_constraintGuide_begin="116dp" />
+        tools:srcCompat="@mipmap/title_horn" />
 </androidx.constraintlayout.widget.ConstraintLayout>

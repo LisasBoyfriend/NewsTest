@@ -40,6 +40,7 @@ public class MainActivity extends AppCompatActivity {
 
     MyHandler handler = new MyHandler();
     MyRunnable myRunnable = new MyRunnable();
+    List<NewsBean.DocsBean.ListBean> newsList;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -50,17 +51,10 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
         initView();
 
-
-        fragments = new ArrayList<>();
-        initFragmentData(fragments);
-        MainFraAdapter adapter = new MainFraAdapter(getSupportFragmentManager(), fragments);
-        viewPager.setAdapter(adapter);
-
-
         initBna(bottomNavigationView);
         initViewPager(viewPager);
-
         new Thread(myRunnable).start();
+
 
 
     }
@@ -95,7 +89,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public void initFragmentData(List<Fragment> fragments) {
-        fragments.add(new FragmentZixun());
+        fragments.add(new FragmentZixun(newsList));
         fragments.add(new FragmentYinshipin());
         fragments.add(new FragmentZhuanti());
         fragments.add(new FragmentWode());
@@ -133,8 +127,13 @@ public class MainActivity extends AppCompatActivity {
             String value = data.getString("value");
 
             NewsBean newsBean = new Gson().fromJson(value, NewsBean.class);
-            Log.i("MainActivity", "handleMessage: " + value);
-            Log.i("MainActivity", "handleMessage: " + newsBean.getDocs().getList().get(1).getAuthor());
+
+            newsList = newsBean.getDocs().getList();//新闻数据列表
+
+            fragments = new ArrayList<>();
+            initFragmentData(fragments);
+            MainFraAdapter adapter = new MainFraAdapter(getSupportFragmentManager(), fragments);
+            viewPager.setAdapter(adapter);
 
         }
     }

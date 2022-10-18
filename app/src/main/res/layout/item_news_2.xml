@@ -1,19 +1,20 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="100dp"
+    android:layout_height="120dp"
     android:padding="10dp"
     android:orientation="horizontal"
     android:background="@color/white">
     <ImageView
         android:id="@+id/iv_news_image"
         android:layout_width="0dp"
-        android:layout_height="80dp"
+        android:layout_height="100dp"
         android:layout_weight="1"
+        android:scaleType="centerCrop"
         android:src="@mipmap/news_demo"/>
-    <LinearLayout
+    <RelativeLayout
         android:layout_width="0dp"
-        android:layout_height="80dp"
+        android:layout_height="wrap_content"
         android:layout_weight="2"
         android:paddingLeft="10dp"
         android:orientation="vertical">
@@ -22,31 +23,36 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:paddingTop="5dp"
-            android:textSize="17sp"
+            android:textSize="16sp"
             android:textColor="@color/black"
-            android:text="这是一段示例新闻标题,习近平参加党的二十大广西代表团"/>
+            android:layout_alignParentTop="true"
+            android:text="这是一段示例新闻标dsadadsadsa题,习近平参加党的二十大广西代表团"/>
+
         <RelativeLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:paddingTop="5dp"
-            android:orientation="horizontal">
+            android:layout_alignParentBottom="true"
+            android:paddingTop="5dp">
+
             <TextView
                 android:id="@+id/tv_news_author"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_alignParentStart="true"
                 android:layout_alignParentLeft="true"
+                android:text="作者"
                 android:textColor="@color/grey"
-                android:textSize="14sp"
-                android:text="作者"/>
+                android:textSize="13sp" />
+
             <TextView
                 android:id="@+id/tv_news_time"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:textColor="@color/grey"
-                android:textSize="14sp"
-                android:paddingLeft="10dp"
                 android:layout_toRightOf="@id/tv_news_author"
-                android:text="发布时间"/>
+                android:paddingLeft="10dp"
+                android:text="发布时间"
+                android:textColor="@color/grey"
+                android:textSize="13sp" />
 
             <ImageView
                 android:id="@+id/iv_news_turn_on"
@@ -54,9 +60,9 @@
                 android:layout_height="25dp"
                 android:layout_alignParentRight="true"
                 android:paddingRight="10dp"
-                android:src="@mipmap/title_horn"/>
+                android:src="@mipmap/title_horn" />
         </RelativeLayout>
 
-    </LinearLayout>
+    </RelativeLayout>
 
 </LinearLayout>
