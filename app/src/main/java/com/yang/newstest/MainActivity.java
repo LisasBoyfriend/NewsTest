@@ -24,6 +24,7 @@ import com.yang.newstest.fragment.FragmentWode;
 import com.yang.newstest.fragment.FragmentYinshipin;
 import com.yang.newstest.fragment.FragmentZhuanti;
 import com.yang.newstest.fragment.FragmentZixun;
+import com.yang.newstest.helper.InterceptorOKHttpClient;
 import com.yang.newstest.helper.requestImpl.GetZixunRequest;
 import com.yang.newstest.utils.StringUtils;
 import com.yang.newstest.utils.URLUtils;
@@ -34,6 +35,7 @@ import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
 
+import okhttp3.OkHttpClient;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -48,7 +50,8 @@ public class MainActivity extends AppCompatActivity {
 
     MyHandler handler = new MyHandler();
     MyRunnable myRunnable = new MyRunnable();
-    List<NewsBean.DocsBean.ListBean> newsList;
+    List<NewsBean.DocsBean.ListBean> newsList;//传给fragment的新闻数据
+    int pageCount = 0;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -99,7 +102,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public void initFragmentData(List<Fragment> fragments) {
-        fragments.add(new FragmentZixun(newsList));
+        fragments.add(new FragmentZixun(newsList, pageCount));
         fragments.add(new FragmentYinshipin());
         fragments.add(new FragmentZhuanti());
         fragments.add(new FragmentWode());
@@ -127,8 +130,11 @@ public class MainActivity extends AppCompatActivity {
 
 //retrofit处理网络数据
     public void request(String baseUrl){
+        //获取OKHttp拦截器对象
+        OkHttpClient client = new InterceptorOKHttpClient().getClient();
         //创建Retrofit对象
         Retrofit retrofit = new Retrofit.Builder()
+                .client(client)
                 .baseUrl(baseUrl)
                 .addConverterFactory(GsonConverterFactory.create())
                 .build();
@@ -136,13 +142,14 @@ public class MainActivity extends AppCompatActivity {
         //创建网络请求接口实例
         GetZixunRequest request = retrofit.create(GetZixunRequest.class);
         //封装发送请求
-        Call<NewsBean> call = request.getCall();
+        Call<NewsBean> call = request.yourGet(URLUtils.PATH_FOR_ZIXUN);
         //发送网络请求
         call.enqueue(new Callback<NewsBean>() {
             @Override
             public void onResponse(Call<NewsBean> call, Response<NewsBean> response) {
                 Log.i("MainActivity", "onResponse: "+response.body().toString());
                 newsList = response.body().getDocs().getList();
+                pageCount = response.body().getDocs().getPager().getPageCount();
                 fragments = new ArrayList<>();
                 initFragmentData(fragments);
                 MainFraAdapter adapter = new MainFraAdapter(getSupportFragmentManager(), fragments);

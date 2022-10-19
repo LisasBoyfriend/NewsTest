@@ -4,9 +4,11 @@ import com.yang.newstest.bean.NewsBean;
 import com.yang.newstest.utils.URLUtils;
 
 import retrofit2.Call;
+import retrofit2.http.Body;
 import retrofit2.http.GET;
+import retrofit2.http.Url;
 
 public interface GetZixunRequest {
-    @GET(URLUtils.PATH_FOR_ZIXUN)
-    Call<NewsBean> getCall();
+    @GET
+    Call<NewsBean> yourGet(@Url String Url);
 }
