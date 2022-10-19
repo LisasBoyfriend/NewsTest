@@ -10,7 +10,7 @@ import java.io.InputStreamReader;
 public class StringUtils {
 
 
-    public static String convertInputStream(InputStream is) {
+    public static String convertInputStream(InputStream is) {//用于处理网络获取的流数据
         BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(is));
         String line = "";
         StringBuilder stringBuilder = new StringBuilder();
@@ -27,7 +27,7 @@ public class StringUtils {
         return response;
 
     }
-    public static String resetTimeArray(String pubTime){
+    public static String resetTimeArray(String pubTime){//用于显示新闻时对时间数据的处理
         StringBuilder stringBuilder = new StringBuilder();
         String[] s = pubTime.split(" ");
         String[] date = s[0].split("-");//把年月日进行了分割，只需要月日

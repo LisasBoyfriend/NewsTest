@@ -10,6 +10,8 @@ import java.net.URL;
 public class URLUtils {
 
     public static final String HTTP_URL = "http://newapp.jyb.cn/app_pub/zixun/tuijian/";
+    public static final String BASE_URL = "http://newapp.jyb.cn";
+    public static final String PATH_FOR_ZIXUN = "/app_pub/zixun/tuijian/";
 
     public String getHttpResponse(String url) {
         StringBuilder stringBuilder = new StringBuilder();

@@ -14,6 +14,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
+import android.widget.Toast;
 
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.gson.Gson;
@@ -23,6 +24,7 @@ import com.yang.newstest.fragment.FragmentWode;
 import com.yang.newstest.fragment.FragmentYinshipin;
 import com.yang.newstest.fragment.FragmentZhuanti;
 import com.yang.newstest.fragment.FragmentZixun;
+import com.yang.newstest.helper.requestImpl.GetZixunRequest;
 import com.yang.newstest.utils.StringUtils;
 import com.yang.newstest.utils.URLUtils;
 
@@ -31,6 +33,12 @@ import java.net.HttpURLConnection;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
+
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
+import retrofit2.Retrofit;
+import retrofit2.converter.gson.GsonConverterFactory;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -53,7 +61,9 @@ public class MainActivity extends AppCompatActivity {
 
         initBna(bottomNavigationView);
         initViewPager(viewPager);
-        new Thread(myRunnable).start();
+        //HttpURLConnection获取网络数据方式
+//        new Thread(myRunnable).start();
+        request(URLUtils.BASE_URL);
 
 
 
@@ -115,8 +125,38 @@ public class MainActivity extends AppCompatActivity {
         });
     }
 
+//retrofit处理网络数据
+    public void request(String baseUrl){
+        //创建Retrofit对象
+        Retrofit retrofit = new Retrofit.Builder()
+                .baseUrl(baseUrl)
+                .addConverterFactory(GsonConverterFactory.create())
+                .build();
 
+        //创建网络请求接口实例
+        GetZixunRequest request = retrofit.create(GetZixunRequest.class);
+        //封装发送请求
+        Call<NewsBean> call = request.getCall();
+        //发送网络请求
+        call.enqueue(new Callback<NewsBean>() {
+            @Override
+            public void onResponse(Call<NewsBean> call, Response<NewsBean> response) {
+                Log.i("MainActivity", "onResponse: "+response.body().toString());
+                newsList = response.body().getDocs().getList();
+                fragments = new ArrayList<>();
+                initFragmentData(fragments);
+                MainFraAdapter adapter = new MainFraAdapter(getSupportFragmentManager(), fragments);
+                viewPager.setAdapter(adapter);
+            }
 
+            @Override
+            public void onFailure(Call<NewsBean> call, Throwable t) {
+
+                Toast.makeText(getApplicationContext(), "请检查网络设置", Toast.LENGTH_SHORT).show();
+            }
+        });
+    }
+//httpUrlConnection处理网络数据
     class MyHandler extends Handler {
 
         @Override

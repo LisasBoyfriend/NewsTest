@@ -30,7 +30,10 @@ public class NewsBean2ViewBinder extends ItemViewBinder<NewsBean.DocsBean.ListBe
         viewHolder.tv_news_author.setText(listBean.getAuthor());
         viewHolder.tv_news_time.setText(StringUtils.resetTimeArray(listBean.getPubTime()));
         if (listBean.getImgUrls().get(0) != null){
-            Glide.with(viewHolder.itemView).load(listBean.getImgUrls().get(0)).into(viewHolder.iv_news_image);
+            Glide.with(viewHolder.itemView)
+                    .load(listBean.getImgUrls().get(0))
+                    .placeholder(R.mipmap.loading)
+                    .into(viewHolder.iv_news_image);
         }
     }
 
