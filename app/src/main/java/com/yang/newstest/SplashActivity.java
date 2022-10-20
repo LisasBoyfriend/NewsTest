@@ -15,13 +15,24 @@ import android.widget.TextView;
 
 import com.yang.newstest.utils.AppUtils;
 
+import java.util.Observable;
+
+import io.reactivex.BackpressureStrategy;
+import io.reactivex.Flowable;
+import io.reactivex.FlowableEmitter;
+import io.reactivex.FlowableOnSubscribe;
+import io.reactivex.Scheduler;
+import io.reactivex.android.schedulers.AndroidSchedulers;
+import io.reactivex.functions.Consumer;
+import io.reactivex.schedulers.Schedulers;
+
 public class SplashActivity extends AppCompatActivity implements View.OnClickListener {
     TextView tv_time;
     FrameLayout layout_start_skip;
-
-    Handler handler = new Handler();
     MCountDownTimer mCountDownTimer;
-    Runnable mRunnable;
+
+//    Handler handler = new Handler();
+//    Runnable mRunnable;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -30,20 +41,48 @@ public class SplashActivity extends AppCompatActivity implements View.OnClickLis
 
         initView();
 
+//        mRunnable = new MyRunnable();
+
 
     }
 
     @Override
     protected void onResume() {
         super.onResume();
-        mRunnable = new MyRunnable();
-        if (AppUtils.isRunBackground(this)) {
-            handler.post(mRunnable);
-        } else {
-            mCountDownTimer = new MCountDownTimer(3000, 1000);
-            mCountDownTimer.start();
-            handler.postDelayed(mRunnable, 3000);
-        }
+//改用RxJava设置启动页
+        Flowable<Boolean> flowable = Flowable.create(new FlowableOnSubscribe<Boolean>() {
+            @Override
+            public void subscribe(FlowableEmitter<Boolean> e) throws Exception {
+                if (AppUtils.isRunBackground(getApplicationContext())){
+                    e.onNext(true);
+                }else {
+                    mCountDownTimer = new MCountDownTimer(3000, 1000);
+                    mCountDownTimer.start();
+                    e.onNext(false);
+                }
+            }
+        }, BackpressureStrategy.ERROR);
+
+        flowable.subscribeOn(AndroidSchedulers.mainThread())
+                .observeOn(Schedulers.newThread())
+                .subscribe(new Consumer<Boolean>() {
+                    @Override
+                    public void accept(Boolean aBoolean) throws Exception {
+                        if (!aBoolean){
+                            Thread.sleep(3000);
+                            turnToMain();
+                        }else {
+                            turnToMain();
+                        }
+                    }
+                });
+//        if (AppUtils.isRunBackground(this)) {
+//            handler.post(mRunnable);
+//        } else {
+//            mCountDownTimer = new MCountDownTimer(3000, 1000);
+//            mCountDownTimer.start();
+//            handler.postDelayed(mRunnable, 3000);
+//        }
 
     }
 
@@ -59,9 +98,9 @@ public class SplashActivity extends AppCompatActivity implements View.OnClickLis
         if (mCountDownTimer != null) {
             mCountDownTimer.cancel();
         }
-        if (mRunnable != null) {
-            handler.removeCallbacks(mRunnable);
-        }
+//        if (mRunnable != null) {
+//            handler.removeCallbacks(mRunnable);
+//        }
         super.onDestroy();
     }
 
@@ -70,11 +109,17 @@ public class SplashActivity extends AppCompatActivity implements View.OnClickLis
         switch (view.getId()) {
             case R.id.layout_start_skip:
                 Log.i("Main", "onClick: ");
-                handler.post(mRunnable);
+                turnToMain();
+//                handler.post(mRunnable);
                 break;
         }
     }
 
+    public void turnToMain(){
+        Intent intent = new Intent(SplashActivity.this, MainActivity.class);
+        startActivity(intent);
+        finish();
+    }
     class MCountDownTimer extends CountDownTimer {
 
         public MCountDownTimer(long millisInFuture, long countDownInterval) {
@@ -99,14 +144,15 @@ public class SplashActivity extends AppCompatActivity implements View.OnClickLis
         }
     }
 
-    class MyRunnable implements Runnable {
 
-        @Override
-        public void run() {
-            Intent intent = new Intent(SplashActivity.this, MainActivity.class);
-            startActivity(intent);
-            finish();
-        }
-    }
+//    class MyRunnable implements Runnable {
+//
+//        @Override
+//        public void run() {
+//            Intent intent = new Intent(SplashActivity.this, MainActivity.class);
+//            startActivity(intent);
+//            finish();
+//        }
+//    }
 
 }
