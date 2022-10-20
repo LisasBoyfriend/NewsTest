@@ -2,8 +2,8 @@
     <!-- Base application theme. -->
     <style name="Theme.NewsTest" parent="Theme.MaterialComponents.DayNight.NoActionBar.Bridge">
         <!-- Primary brand color. -->
-        <item name="colorPrimary">@color/design_default_color_primary</item>
-        <item name="colorPrimaryVariant">@color/purple_700</item>
+        <item name="colorPrimary">@color/red</item>
+        <item name="colorPrimaryVariant">@color/red</item>
         <item name="colorOnPrimary">@color/white</item>
         <!-- Secondary brand color. -->
         <item name="colorSecondary">@color/teal_200</item>
@@ -13,4 +13,18 @@
         <item name="android:statusBarColor" tools:targetApi="l">?attr/colorPrimaryVariant</item>
         <!-- Customize your theme here. -->
     </style>
+
+    <style name="WelcomeTheme" parent="Theme.AppCompat.NoActionBar">
+        <item name="windowActionBar">false</item>
+        <item name="windowNoTitle">true</item>
+        <item name="android:windowFullscreen">true</item>
+        <item name="android:windowBackground">@mipmap/splash</item>
+
+        <!--设置背景颜色-->
+        <!--设置没有ActionBar-->
+        <item name="android:windowNoTitle">true</item>
+        <!--设置顶部状态栏颜色-->
+        <item name="android:statusBarColor" tools:targetApi="l">@color/red</item>
+    </style>
+
 </resources>

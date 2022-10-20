@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@mipmap/splash"
+    tools:context=".SplashActivity">
+    <FrameLayout
+        android:id="@+id/layout_start_skip"
+        android:onClick="onClick"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentTop="true">
+
+        <TextView
+            android:id="@+id/tv_start_skip_count_down"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_margin="20dp"
+            android:text="@string/click_to_skip"
+            android:gravity="center"
+            android:background="@drawable/tv_splash"
+            android:textColor="@android:color/white"
+            android:textSize="14sp"
+            />
+    </FrameLayout>
+
+<!--    <RelativeLayout-->
+<!--        android:layout_width="match_parent"-->
+<!--        android:layout_height="wrap_content">-->
+
+<!--        <TextView-->
+<!--            android:id="@+id/tv_time"-->
+<!--            android:layout_width="wrap_content"-->
+<!--            android:layout_height="wrap_content"-->
+<!--            android:layout_alignParentRight="true"-->
+<!--            android:background="@drawable/tv_splash"-->
+<!--            android:padding="5dp"-->
+<!--            android:text="3"-->
+<!--            android:textColor="@color/black"-->
+<!--            android:textSize="18sp" />-->
+<!--    </RelativeLayout>-->
+
+
+</RelativeLayout>

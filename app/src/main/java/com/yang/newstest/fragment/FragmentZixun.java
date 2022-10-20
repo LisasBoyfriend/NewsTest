@@ -116,7 +116,9 @@ public class FragmentZixun extends Fragment{
             @Override
             public void onLoadMore(@NonNull RefreshLayout refreshLayout) {
 
-                pageNow--;
+                if (pageNow > 0){
+                    pageNow--;
+                }
                 requestLoadMore();//需要分页，这里需要重构url
                 mSmartRefreshLayout.finishLoadMore(1000);
             }
@@ -152,11 +154,16 @@ public class FragmentZixun extends Fragment{
                 List<NewsBean.DocsBean.ListBean> list = response.body().getDocs().getList();
                 mData.addAll(list);
                 adapter.notifyDataSetChanged();
+                adapter.notifyItemRangeChanged(mData.size()-list.size(), list.size());
             }
 
             @Override
             public void onFailure(Call<NewsBean> call, Throwable t) {
-                Toast.makeText(getContext(), "请检查网络设置", Toast.LENGTH_SHORT).show();
+                if (pageNow == 0){
+                    Toast.makeText(getContext(), "已经到底啦", Toast.LENGTH_SHORT).show();
+                }else {
+                    Toast.makeText(getContext(), "请检查网络设置", Toast.LENGTH_SHORT).show();
+                }
             }
         });
     }
