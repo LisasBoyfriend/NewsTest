@@ -30,6 +30,7 @@ public class SplashActivity extends AppCompatActivity implements View.OnClickLis
     TextView tv_time;
     FrameLayout layout_start_skip;
     MCountDownTimer mCountDownTimer;
+    private static Boolean isExit;
 
 //    Handler handler = new Handler();
 //    Runnable mRunnable;
@@ -70,7 +71,9 @@ public class SplashActivity extends AppCompatActivity implements View.OnClickLis
                     public void accept(Boolean aBoolean) throws Exception {
                         if (!aBoolean){
                             Thread.sleep(3000);
-                            turnToMain();
+                            if (!isExit){
+                                turnToMain();
+                            }
                         }else {
                             turnToMain();
                         }
@@ -91,6 +94,7 @@ public class SplashActivity extends AppCompatActivity implements View.OnClickLis
 
         layout_start_skip = findViewById(R.id.layout_start_skip);
         tv_time.setText("3" + getString(R.string.click_to_skip));
+        isExit = false;
     }
 
     @Override
@@ -110,6 +114,8 @@ public class SplashActivity extends AppCompatActivity implements View.OnClickLis
             case R.id.layout_start_skip:
                 Log.i("Main", "onClick: ");
                 turnToMain();
+                finish();
+                isExit = true;
 //                handler.post(mRunnable);
                 break;
         }
@@ -118,7 +124,6 @@ public class SplashActivity extends AppCompatActivity implements View.OnClickLis
     public void turnToMain(){
         Intent intent = new Intent(SplashActivity.this, MainActivity.class);
         startActivity(intent);
-        finish();
     }
     class MCountDownTimer extends CountDownTimer {
 

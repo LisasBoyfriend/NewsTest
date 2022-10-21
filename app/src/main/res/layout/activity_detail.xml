@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:padding="10dp"
+    tools:context=".DetailActivity"
+    android:background="@color/white"
+    android:orientation="vertical">
+
+    <RelativeLayout
+        android:id="@+id/layout_detail_top"
+        android:layout_width="match_parent"
+        android:layout_height="50dp">
+        <ImageView
+            android:id="@+id/iv_back"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:onClick="onClick"
+            android:layout_centerInParent="true"
+            android:src="@drawable/ic_back_24"
+            android:layout_alignParentLeft="true" />
+
+
+        <ImageView
+            android:id="@+id/iv_more"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:onClick="onClick"
+            android:layout_centerInParent="true"
+            android:src="@drawable/ic_more_horiz_24"
+            android:layout_alignParentRight="true" />
+
+        <ImageView
+            android:id="@+id/iv_hearing"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/ic_hearing_24"
+            android:layout_centerInParent="true"
+            android:onClick="onClick"
+            android:layout_marginRight="10dp"
+            android:layout_toLeftOf="@id/iv_more"/>
+
+    </RelativeLayout>
+
+
+    <WebView
+        android:id="@+id/wv_news"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent" />
+</LinearLayout>

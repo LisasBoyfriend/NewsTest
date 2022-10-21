@@ -14,6 +14,9 @@
         <!-- Customize your theme here. -->
     </style>
 
+    <style name="WhiteStyle" parent="Theme.MaterialComponents.DayNight.NoActionBar.Bridge">
+
+    </style>
     <style name="WelcomeTheme" parent="Theme.AppCompat.NoActionBar">
         <item name="windowActionBar">false</item>
         <item name="windowNoTitle">true</item>

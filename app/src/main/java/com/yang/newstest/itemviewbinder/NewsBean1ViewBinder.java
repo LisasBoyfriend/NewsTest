@@ -1,5 +1,7 @@
 package com.yang.newstest.itemviewbinder;
 
+import android.content.Intent;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -11,7 +13,9 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
 import com.drakeet.multitype.ItemViewBinder;
+import com.yang.newstest.DetailActivity;
 import com.yang.newstest.R;
+import com.yang.newstest.UniteApplication;
 import com.yang.newstest.bean.NewsBean;
 import com.yang.newstest.utils.StringUtils;
 
@@ -29,6 +33,15 @@ public class NewsBean1ViewBinder extends ItemViewBinder<NewsBean.DocsBean.ListBe
         viewHolder.tv_news_title.setText(listBean.getListTitle());
         viewHolder.tv_news_author.setText(listBean.getAuthor());
         viewHolder.tv_news_time.setText(StringUtils.resetTimeArray(listBean.getPubTime()));
+        viewHolder.itemView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Log.i("ViewBinding1", "onClick: ");
+                Intent intent = new Intent(UniteApplication.getContext(), DetailActivity.class);
+                intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                UniteApplication.getContext().startActivity(intent);
+            }
+        });
     }
 
     public class ViewHolder extends RecyclerView.ViewHolder {

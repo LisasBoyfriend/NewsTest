@@ -4,7 +4,7 @@
     android:layout_height="110dp"
     android:padding="10dp"
     android:orientation="vertical"
-    android:background="@color/white">
+    android:background="@drawable/selector_item">
     <TextView
         android:id="@+id/tv_news_title"
         android:layout_width="match_parent"
