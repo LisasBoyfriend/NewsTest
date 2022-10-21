@@ -119,11 +119,11 @@ public class DetailActivity extends AppCompatActivity {
         rg_font_size = dialog.getWindow().findViewById(R.id.rg_dialog);
 
         tv_cancel = dialog.getWindow().findViewById(R.id.tv_dialog_cancel);
-        if (webViewSize == 90) {
+        if (webViewSize == 80) {
             rb_font_size = dialog.getWindow().findViewById(R.id.rb_dialog_small);
-        } else if (webViewSize == 110) {
-            rb_font_size = dialog.getWindow().findViewById(R.id.rb_dialog_big);
         } else if (webViewSize == 120) {
+            rb_font_size = dialog.getWindow().findViewById(R.id.rb_dialog_big);
+        } else if (webViewSize == 140) {
             rb_font_size = dialog.getWindow().findViewById(R.id.rb_dialog_large);
         } else {
             rb_font_size = dialog.getWindow().findViewById(R.id.rb_dialog_medium);
@@ -136,7 +136,7 @@ public class DetailActivity extends AppCompatActivity {
                 switch (i) {
                     case R.id.rb_dialog_small:
                         wb_news.getSettings().setTextZoom(80);
-                        SharePreUtils.putIntInfoToSP(SharePreUtils.WEBVIEW_SIZE, 90, preferences);
+                        SharePreUtils.putIntInfoToSP(SharePreUtils.WEBVIEW_SIZE, 80, preferences);
                         break;
                     case R.id.rb_dialog_medium:
                         wb_news.getSettings().setTextZoom(100);
@@ -144,11 +144,11 @@ public class DetailActivity extends AppCompatActivity {
                         break;
                     case R.id.rb_dialog_big:
                         wb_news.getSettings().setTextZoom(120);
-                        SharePreUtils.putIntInfoToSP(SharePreUtils.WEBVIEW_SIZE, 110, preferences);
+                        SharePreUtils.putIntInfoToSP(SharePreUtils.WEBVIEW_SIZE, 120, preferences);
                         break;
                     case R.id.rb_dialog_large:
-                        SharePreUtils.putIntInfoToSP(SharePreUtils.WEBVIEW_SIZE, 120, preferences);
                         wb_news.getSettings().setTextZoom(140);
+                        SharePreUtils.putIntInfoToSP(SharePreUtils.WEBVIEW_SIZE, 140, preferences);
                         break;
                 }
             }

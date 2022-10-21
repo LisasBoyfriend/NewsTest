@@ -124,6 +124,7 @@ public class SplashActivity extends AppCompatActivity implements View.OnClickLis
     public void turnToMain(){
         Intent intent = new Intent(SplashActivity.this, MainActivity.class);
         startActivity(intent);
+        finish();
     }
     class MCountDownTimer extends CountDownTimer {
 
