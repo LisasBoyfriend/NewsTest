@@ -135,7 +135,7 @@ public class DetailActivity extends AppCompatActivity {
             public void onCheckedChanged(RadioGroup radioGroup, int i) {
                 switch (i) {
                     case R.id.rb_dialog_small:
-                        wb_news.getSettings().setTextZoom(90);
+                        wb_news.getSettings().setTextZoom(80);
                         SharePreUtils.putIntInfoToSP(SharePreUtils.WEBVIEW_SIZE, 90, preferences);
                         break;
                     case R.id.rb_dialog_medium:
@@ -143,12 +143,12 @@ public class DetailActivity extends AppCompatActivity {
                         SharePreUtils.putIntInfoToSP(SharePreUtils.WEBVIEW_SIZE, 100, preferences);
                         break;
                     case R.id.rb_dialog_big:
-                        wb_news.getSettings().setTextZoom(110);
+                        wb_news.getSettings().setTextZoom(120);
                         SharePreUtils.putIntInfoToSP(SharePreUtils.WEBVIEW_SIZE, 110, preferences);
                         break;
                     case R.id.rb_dialog_large:
                         SharePreUtils.putIntInfoToSP(SharePreUtils.WEBVIEW_SIZE, 120, preferences);
-                        wb_news.getSettings().setTextZoom(120);
+                        wb_news.getSettings().setTextZoom(140);
                         break;
                 }
             }
