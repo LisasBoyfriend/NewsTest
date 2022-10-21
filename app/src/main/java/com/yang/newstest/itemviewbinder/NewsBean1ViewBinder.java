@@ -1,6 +1,7 @@
 package com.yang.newstest.itemviewbinder;
 
 import android.content.Intent;
+import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -36,10 +37,8 @@ public class NewsBean1ViewBinder extends ItemViewBinder<NewsBean.DocsBean.ListBe
         viewHolder.itemView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Log.i("ViewBinding1", "onClick: ");
-                Intent intent = new Intent(UniteApplication.getContext(), DetailActivity.class);
-                intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-                UniteApplication.getContext().startActivity(intent);
+                String url = listBean.getLinkUrl();
+                DetailActivity.start(UniteApplication.getContext(), url);
             }
         });
     }

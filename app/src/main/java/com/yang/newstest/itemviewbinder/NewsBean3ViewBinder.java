@@ -42,9 +42,8 @@ public class NewsBean3ViewBinder extends ItemViewBinder<NewsBean.DocsBean.ListBe
             @Override
             public void onClick(View view) {
                 Log.i("ViewBinding3", "onClick: ");
-                Intent intent = new Intent(UniteApplication.getContext(), DetailActivity.class);
-                intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-                UniteApplication.getContext().startActivity(intent);            }
+                String url = listBean.getLinkUrl();
+                DetailActivity.start(UniteApplication.getContext(), url);            }
         });
     }
 
