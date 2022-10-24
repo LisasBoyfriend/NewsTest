@@ -16,7 +16,16 @@
 
     <style name="WhiteStyle" parent="Theme.MaterialComponents.DayNight.NoActionBar.Bridge">
 
+
     </style>
+    <style name="ImageActivityTheme" parent="Theme.AppCompat.NoActionBar">
+        <item name="windowActionBar">false</item>
+        <item name="windowNoTitle">true</item>
+        <item name="android:windowFullscreen">true</item>
+        <item name="android:windowNoTitle">true</item>
+
+    </style>
+
     <style name="WelcomeTheme" parent="Theme.AppCompat.NoActionBar">
         <item name="windowActionBar">false</item>
         <item name="windowNoTitle">true</item>

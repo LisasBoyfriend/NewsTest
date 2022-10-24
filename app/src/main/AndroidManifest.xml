@@ -16,10 +16,14 @@
         android:theme="@style/Theme.NewsTest"
         android:usesCleartextTraffic="true">
         <activity
-            android:name=".DetailActivity"
-            android:theme="@style/WhiteStyle"
-            android:launchMode="singleTop"
+            android:name=".ImageActivity"
+            android:theme="@style/ImageActivityTheme"
             android:exported="true" />
+        <activity
+            android:name=".DetailActivity"
+            android:exported="true"
+            android:launchMode="singleTop"
+            android:theme="@style/WhiteStyle" />
         <activity
             android:name=".SplashActivity"
             android:exported="true"
@@ -34,7 +38,7 @@
         <activity
             android:name=".MainActivity"
             android:exported="true"
-            android:launchMode="singleTop"></activity>
+            android:launchMode="singleTop" />
     </application>
 
 </manifest>

@@ -12,6 +12,7 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.KeyEvent;
 import android.view.View;
+import android.webkit.JavascriptInterface;
 import android.webkit.WebChromeClient;
 import android.webkit.WebResourceError;
 import android.webkit.WebResourceRequest;
@@ -28,6 +29,9 @@ import android.widget.Toast;
 
 import com.google.android.material.bottomsheet.BottomSheetDialog;
 import com.yang.newstest.utils.SharePreUtils;
+
+import java.util.ArrayList;
+import java.util.Arrays;
 
 public class DetailActivity extends AppCompatActivity {
 
@@ -122,6 +126,7 @@ public class DetailActivity extends AppCompatActivity {
 
         //设置默认字体大小
         settings.setTextZoom(webViewSize);
+        mWebView.addJavascriptInterface(new JsObject(), "myObject");
 
     }
 
@@ -190,6 +195,21 @@ public class DetailActivity extends AppCompatActivity {
         public void onPageFinished(WebView view, String url) {
             progressBar.setVisibility(View.GONE);
             super.onPageFinished(view, url);
+            //添加js代码
+            view.loadUrl("javascript:function img(){" +
+                    "var href=document.getElementsByTagName(\"img\");" +
+                    "var srcs = [];\n"+
+                    "\t\t for(var i=0;i<href.length;i++){\n" +
+                    "\t\t \t   var a=document.getElementsByTagName(\"img\")[i];\n" +
+                    "\t\t \t   srcs[i]=a.src;\n"+
+                    "\t\t \t   a.onclick=function(){\n" +
+                    "\t\t \t        window.myObject.showImage(this.src, srcs, i)" +
+                    "\t\t \t   };\n" +
+                    "\t\t }" +
+                    "}");
+            //执行js函数
+            view.loadUrl("javascript:img()");
+
         }
 
         @Override
@@ -200,6 +220,16 @@ public class DetailActivity extends AppCompatActivity {
         @Override
         public void onReceivedHttpError(WebView view, WebResourceRequest request, WebResourceResponse errorResponse) {
             super.onReceivedHttpError(view, request, errorResponse);
+        }
+
+
+    }
+    class JsObject{
+        @JavascriptInterface
+        public void showImage(String src, String[] srcs, int position){
+            ArrayList<String> srcsList = (ArrayList<String>) new ArrayList<>(Arrays.asList(srcs));
+            ImageActivity.start(DetailActivity.this, srcsList, src, position);
+            Log.i(TAG, "showImage: "+src);
         }
     }
 
