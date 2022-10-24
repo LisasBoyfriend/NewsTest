@@ -44,6 +44,13 @@
 
     </RelativeLayout>
 
+    <ProgressBar
+        style="@style/Widget.AppCompat.ProgressBar.Horizontal"
+        android:id="@+id/progress"
+        android:visibility="gone"
+        android:layout_width="match_parent"
+        android:layout_height="2dp"
+        android:max="100"/>
 
     <WebView
         android:id="@+id/wb_news"

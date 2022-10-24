@@ -6,17 +6,21 @@ import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.graphics.Bitmap;
 import android.os.Build;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.KeyEvent;
 import android.view.View;
+import android.webkit.WebChromeClient;
 import android.webkit.WebResourceError;
 import android.webkit.WebResourceRequest;
+import android.webkit.WebResourceResponse;
 import android.webkit.WebSettings;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
 import android.widget.ImageView;
+import android.widget.ProgressBar;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.TextView;
@@ -30,6 +34,7 @@ public class DetailActivity extends AppCompatActivity {
     private static String TAG = "DetailActivity";
     ImageView iv_back, iv_hearing, iv_more;
     WebView wb_news;
+    ProgressBar progressBar;
     String url;
     SharedPreferences preferences;
 
@@ -76,6 +81,7 @@ public class DetailActivity extends AppCompatActivity {
     private void initView() {
         iv_back = findViewById(R.id.iv_back);
         iv_hearing = findViewById(R.id.iv_hearing);
+        progressBar = findViewById(R.id.progress);
         iv_more = findViewById(R.id.iv_more);
         wb_news = findViewById(R.id.wb_news);
         initWebView(wb_news);
@@ -84,7 +90,17 @@ public class DetailActivity extends AppCompatActivity {
     }
 
     private void initWebView(WebView mWebView) {
-        mWebView.setWebViewClient(new WebViewClient());
+        mWebView.setWebViewClient(new MyWebClient());
+        mWebView.setWebChromeClient(new WebChromeClient(){
+            @Override
+            public void onProgressChanged(WebView view, int newProgress) {
+                progressBar.setProgress(newProgress);
+                if (newProgress == 100){
+                    progressBar.setVisibility(View.GONE);
+                }
+                super.onProgressChanged(view, newProgress);
+            }
+        });
         WebSettings settings = mWebView.getSettings();
         //设置可以与JavaScript交互
         settings.setJavaScriptEnabled(true);
@@ -110,6 +126,7 @@ public class DetailActivity extends AppCompatActivity {
     }
 
     public void showBottomSheetsDialog() {
+        webViewSize = SharePreUtils.getIntInfoFromSP(SharePreUtils.WEBVIEW_SIZE, preferences);
         RadioButton rb_font_size;
         RadioGroup rg_font_size;
         TextView tv_cancel;
@@ -162,5 +179,28 @@ public class DetailActivity extends AppCompatActivity {
         dialog.show();
     }
 
+    class MyWebClient extends WebViewClient{
+        @Override
+        public void onPageStarted(WebView view, String url, Bitmap favicon) {
+            progressBar.setVisibility(View.VISIBLE);
+            super.onPageStarted(view, url, favicon);
+        }
+
+        @Override
+        public void onPageFinished(WebView view, String url) {
+            progressBar.setVisibility(View.GONE);
+            super.onPageFinished(view, url);
+        }
+
+        @Override
+        public void onReceivedError(WebView view, WebResourceRequest request, WebResourceError error) {
+            super.onReceivedError(view, request, error);
+        }
+
+        @Override
+        public void onReceivedHttpError(WebView view, WebResourceRequest request, WebResourceResponse errorResponse) {
+            super.onReceivedHttpError(view, request, errorResponse);
+        }
+    }
 
 }

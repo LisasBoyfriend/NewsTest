@@ -59,7 +59,6 @@ public class FragmentZixun extends Fragment{
     Retrofit mRetrofit;
 
     List<NewsBean.DocsBean.ListBean> mData = new ArrayList<>();
-//    List<NewsBean.DocsBean.FocusesBean> mBannerData = new ArrayList<>();
     NewsBean.DocsBean docsBean;
     List<Object> data = new ArrayList<>();
 
@@ -78,9 +77,7 @@ public class FragmentZixun extends Fragment{
         View view = inflater.inflate(R.layout.fragment_zixun, container, false);
         initView(view);
         mHelper = new RetrofitHelper();
-        requestBannerData();
 
-        bindBanner();
         recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
         //添加Android自带的分割线
         recyclerView.addItemDecoration(new DividerItemDecoration(getContext(),DividerItemDecoration.VERTICAL));
@@ -91,18 +88,27 @@ public class FragmentZixun extends Fragment{
         adapter.setItems(data);
         adapter.notifyDataSetChanged();
         initSfl(mSmartRefreshLayout);
+        requestBannerData();
+
 
         return view;
     }
 
     private void bindBanner() {
 
+        if (recyclerView != null){
+            if (recyclerView.getChildAt(0) != null){
+                View child = recyclerView.getChildAt(0);
+                RecyclerView.ViewHolder viewHolder = recyclerView.getChildViewHolder(child);
+                banner = viewHolder.itemView.findViewById(R.id.banner);
+                Log.i(TAG, "bindBanner: 1"+recyclerView.getChildAt(0));
+            }
+        }
     }
 
     public void initView(View view){
         recyclerView = view.findViewById(R.id.rv_fra_zixun);
         mSmartRefreshLayout = view.findViewById(R.id.sml);
-//        banner = view.findViewById(R.id.banner);
     }
 
     public void initAdapter(MultiTypeAdapter adapter){

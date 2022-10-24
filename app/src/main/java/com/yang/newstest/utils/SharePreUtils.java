@@ -1,6 +1,7 @@
 package com.yang.newstest.utils;
 
 import android.content.SharedPreferences;
+import android.util.Log;
 
 import com.yang.newstest.UniteApplication;
 
@@ -25,6 +26,7 @@ public class SharePreUtils {
     }
 
     public static void putIntInfoToSP(String key, int info, SharedPreferences sp) {
+        Log.i("SP", "putIntInfoToSP: "+key+" "+info);
         SharedPreferences.Editor edit = sp.edit();
         edit.putInt(key, info);
         edit.commit();
@@ -35,6 +37,8 @@ public class SharePreUtils {
     }
 
     public static int getIntInfoFromSP(String key, SharedPreferences sp) {
+        Log.i("SP", "getIntFromSP: "+key+" "+sp.getInt(key, 0));
+
         return sp.getInt(key, 0);
     }
 

@@ -22,7 +22,6 @@ import java.util.List;
 public class HeaderViewBinder extends ItemViewBinder<NewsBean.DocsBean, HeaderViewBinder.ViewHolder> {
     Fragment fragment;
     public HeaderViewBinder (Fragment fragment){
-        Log.i("Fra", "HeaderViewBinder: ");
         this.fragment = fragment;
     }
     @NonNull
