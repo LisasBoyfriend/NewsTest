@@ -121,6 +121,12 @@ public class SplashActivity extends AppCompatActivity implements View.OnClickLis
         }
     }
 
+    @Override
+    public void onBackPressed() {
+        isExit = true;
+        super.onBackPressed();
+    }
+
     public void turnToMain(){
         Intent intent = new Intent(SplashActivity.this, MainActivity.class);
         startActivity(intent);

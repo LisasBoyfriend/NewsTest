@@ -75,7 +75,7 @@ public class MainActivity extends AppCompatActivity {
         //RxJava+Retrofit获取网络信息
         mRetrofitHelper = new RetrofitHelper();
         Retrofit retrofit = mRetrofitHelper.getRetrofit(URLUtils.BASE_URL);
-        mRetrofitHelper.makeRequest("", retrofit, new Consumer<NewsBean>() {
+        mRetrofitHelper.makeRequest(URLUtils.PATH_FOR_ZIXUN_TUIJIAN, "", retrofit, new Consumer<NewsBean>() {
             @Override
             public void accept(NewsBean newsBean) throws Exception {
 

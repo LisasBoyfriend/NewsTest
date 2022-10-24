@@ -9,10 +9,17 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         app:srlPrimaryColor="@color/grey">
-        <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/rv_fra_zixun"
+
+        <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="match_parent"/>
+            android:layout_height="match_parent"
+            android:orientation="vertical">
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/rv_fra_zixun"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"/>
+        </LinearLayout>
+
     </com.scwang.smart.refresh.layout.SmartRefreshLayout>
 
 

@@ -35,9 +35,9 @@ public class RetrofitHelper {
 
     //发送请求
 
-    public void makeRequest(String url, Retrofit retrofit, Consumer<NewsBean> successfulConsumer, Consumer<Throwable> errorConsumer) {
+    public void makeRequest(String path1, String path2, Retrofit retrofit, Consumer<NewsBean> successfulConsumer, Consumer<Throwable> errorConsumer) {
         GetZixunRequest request = retrofit.create(GetZixunRequest.class);
-        request.getCallUseRxJava(URLUtils.PATH_FOR_ZIXUN + url)
+        request.getCallUseRxJava(path1 + path2)
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribeOn(Schedulers.io())
                 .subscribe(successfulConsumer, errorConsumer);

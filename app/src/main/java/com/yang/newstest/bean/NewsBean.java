@@ -4,14 +4,14 @@ import java.util.List;
 
 //获取新闻后的实体类
 public class NewsBean {
-    private List<?> channels;
+    private List<NewsBean.ChannelsBean> channels;
     private DocsBean docs;//新闻内容主要在此
 
-    public List<?> getChannels() {
+    public List<NewsBean.ChannelsBean> getChannels() {
         return channels;
     }
 
-    public void setChannels(List<?> channels) {
+    public void setChannels(List<NewsBean.ChannelsBean> channels) {
         this.channels = channels;
     }
 
@@ -489,6 +489,107 @@ public class NewsBean {
                     this.channelNav = channelNav;
                 }
             }
+        }
+    }
+    public static class ChannelsBean {
+        private String channelId;
+        private String channelUrl;
+        private String appChannelDesc;
+        private String channelCode;
+        private String firstScreen;
+        private String isFixed;
+        private List<String> channelLogo;
+        private String channelType;
+        private String linkUrl;
+        private String hasChildren;
+        private String channelComment;
+
+        public String getChannelId() {
+            return channelId;
+        }
+
+        public void setChannelId(String channelId) {
+            this.channelId = channelId;
+        }
+
+        public String getChannelUrl() {
+            return channelUrl;
+        }
+
+        public void setChannelUrl(String channelUrl) {
+            this.channelUrl = channelUrl;
+        }
+
+        public String getAppChannelDesc() {
+            return appChannelDesc;
+        }
+
+        public void setAppChannelDesc(String appChannelDesc) {
+            this.appChannelDesc = appChannelDesc;
+        }
+
+        public String getChannelCode() {
+            return channelCode;
+        }
+
+        public void setChannelCode(String channelCode) {
+            this.channelCode = channelCode;
+        }
+
+        public String getFirstScreen() {
+            return firstScreen;
+        }
+
+        public void setFirstScreen(String firstScreen) {
+            this.firstScreen = firstScreen;
+        }
+
+        public String getIsFixed() {
+            return isFixed;
+        }
+
+        public void setIsFixed(String isFixed) {
+            this.isFixed = isFixed;
+        }
+
+        public List<String> getChannelLogo() {
+            return channelLogo;
+        }
+
+        public void setChannelLogo(List<String> channelLogo) {
+            this.channelLogo = channelLogo;
+        }
+
+        public String getChannelType() {
+            return channelType;
+        }
+
+        public void setChannelType(String channelType) {
+            this.channelType = channelType;
+        }
+
+        public String getLinkUrl() {
+            return linkUrl;
+        }
+
+        public void setLinkUrl(String linkUrl) {
+            this.linkUrl = linkUrl;
+        }
+
+        public String getHasChildren() {
+            return hasChildren;
+        }
+
+        public void setHasChildren(String hasChildren) {
+            this.hasChildren = hasChildren;
+        }
+
+        public String getChannelComment() {
+            return channelComment;
+        }
+
+        public void setChannelComment(String channelComment) {
+            this.channelComment = channelComment;
         }
     }
 }

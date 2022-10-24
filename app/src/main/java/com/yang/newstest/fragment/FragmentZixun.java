@@ -23,15 +23,19 @@ import com.scwang.smart.refresh.layout.api.RefreshLayout;
 import com.scwang.smart.refresh.layout.listener.OnLoadMoreListener;
 import com.scwang.smart.refresh.layout.listener.OnRefreshListener;
 import com.yang.newstest.R;
+import com.yang.newstest.adapter.ImageBannerAdapter;
 import com.yang.newstest.bean.NewsBean;
 import com.yang.newstest.helper.InterceptorOKHttpClient;
 import com.yang.newstest.helper.RetrofitHelper;
 import com.yang.newstest.helper.requestImpl.GetZixunRequest;
+import com.yang.newstest.itemviewbinder.HeaderViewBinder;
 import com.yang.newstest.itemviewbinder.NewsBean1ViewBinder;
 import com.yang.newstest.itemviewbinder.NewsBean2ViewBinder;
 import com.yang.newstest.itemviewbinder.NewsBean3ViewBinder;
 import com.yang.newstest.itemviewbinder.NewsBean4ViewBinder;
 import com.yang.newstest.utils.URLUtils;
+import com.youth.banner.Banner;
+import com.youth.banner.indicator.CircleIndicator;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -46,13 +50,19 @@ import retrofit2.converter.gson.GsonConverterFactory;
 
 public class FragmentZixun extends Fragment{
 
+    private static final String TAG = "FragmentZixun";
     private RecyclerView recyclerView;
     private MultiTypeAdapter adapter;
     private SmartRefreshLayout mSmartRefreshLayout;
+    private Banner banner;
     RetrofitHelper mHelper;
     Retrofit mRetrofit;
 
     List<NewsBean.DocsBean.ListBean> mData = new ArrayList<>();
+//    List<NewsBean.DocsBean.FocusesBean> mBannerData = new ArrayList<>();
+    NewsBean.DocsBean docsBean;
+    List<Object> data = new ArrayList<>();
+
     int pageCount = 0;
     int pageNow = 0;
 
@@ -67,23 +77,32 @@ public class FragmentZixun extends Fragment{
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_zixun, container, false);
         initView(view);
+        mHelper = new RetrofitHelper();
+        requestBannerData();
+
+        bindBanner();
         recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
         //添加Android自带的分割线
         recyclerView.addItemDecoration(new DividerItemDecoration(getContext(),DividerItemDecoration.VERTICAL));
         adapter = new MultiTypeAdapter();
         initAdapter(adapter);
         recyclerView.setAdapter(adapter);
-        adapter.setItems(mData);
+        data.addAll(mData);
+        adapter.setItems(data);
         adapter.notifyDataSetChanged();
         initSfl(mSmartRefreshLayout);
 
-        mHelper = new RetrofitHelper();
         return view;
+    }
+
+    private void bindBanner() {
+
     }
 
     public void initView(View view){
         recyclerView = view.findViewById(R.id.rv_fra_zixun);
         mSmartRefreshLayout = view.findViewById(R.id.sml);
+//        banner = view.findViewById(R.id.banner);
     }
 
     public void initAdapter(MultiTypeAdapter adapter){
@@ -102,6 +121,7 @@ public class FragmentZixun extends Fragment{
                 }
             }
         });
+        adapter.register(NewsBean.DocsBean.class, new HeaderViewBinder(this));
     }
 
     public void initSfl(SmartRefreshLayout mSmartRefreshLayout){
@@ -131,17 +151,43 @@ public class FragmentZixun extends Fragment{
         });
     }
 
+
+
+    private void requestBannerData(){
+        //Retrofit+RxJava框架
+        mRetrofit = mHelper.getRetrofit(URLUtils.BASE_URL);
+        mHelper.makeRequest(URLUtils.PATH_FOR_ZIXUN_TOUTIAO, "", mRetrofit, new Consumer<NewsBean>() {
+            @Override
+            public void accept(NewsBean newsBean) throws Exception {
+
+                docsBean = newsBean.getDocs();
+                data.clear();
+                data.add(docsBean);
+                data.addAll(mData);
+                adapter.notifyDataSetChanged();
+
+            }
+        }, new Consumer<Throwable>() {
+            @Override
+            public void accept(Throwable throwable) throws Exception {
+                Toast.makeText(getContext(), "请检查网络设置", Toast.LENGTH_SHORT).show();
+            }
+        });
+    }
+
+
     private void requestRefresh(){
 
         //Retrofit+RxJava框架
         mRetrofit = mHelper.getRetrofit(URLUtils.BASE_URL);
-        mHelper.makeRequest("", mRetrofit, new Consumer<NewsBean>() {
+        mHelper.makeRequest(URLUtils.PATH_FOR_ZIXUN_TUIJIAN, "", mRetrofit, new Consumer<NewsBean>() {
             @Override
             public void accept(NewsBean newsBean) throws Exception {
 
                 List<NewsBean.DocsBean.ListBean> list = newsBean.getDocs().getList();
-                mData.clear();
-                mData.addAll(list);
+                data.clear();
+                data.add(docsBean);
+                data.addAll(list);
                 adapter.notifyDataSetChanged();
             }
         }, new Consumer<Throwable>() {
@@ -150,6 +196,7 @@ public class FragmentZixun extends Fragment{
                 Toast.makeText(getContext(), "请检查网络设置", Toast.LENGTH_SHORT).show();
             }
         });
+
         //单Retrofit框架
 //        Call<NewsBean> call = getHttpCall(URLUtils.BASE_URL,"");
 //        call.enqueue(new Callback<NewsBean>() {
@@ -172,13 +219,13 @@ public class FragmentZixun extends Fragment{
         String pageStr = "index_"+pageNow+".json";
         //Retrofit+RxJava框架
         mRetrofit = mHelper.getRetrofit(URLUtils.BASE_URL);
-        mHelper.makeRequest(pageStr, mRetrofit, new Consumer<NewsBean>() {
+        mHelper.makeRequest(URLUtils.PATH_FOR_ZIXUN_TUIJIAN, pageStr, mRetrofit, new Consumer<NewsBean>() {
             @Override
             public void accept(NewsBean newsBean) throws Exception {
 
                 List<NewsBean.DocsBean.ListBean> list = newsBean.getDocs().getList();
-                mData.addAll(list);
-                adapter.notifyItemRangeChanged(mData.size()-list.size(), list.size());
+                data.addAll(list);
+                adapter.notifyItemRangeChanged(data.size()-list.size(), list.size());
             }
         }, new Consumer<Throwable>() {
             @Override
