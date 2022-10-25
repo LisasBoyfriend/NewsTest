@@ -193,6 +193,24 @@ public class DetailActivity extends AppCompatActivity {
         dialog.show();
     }
 
+    @Override
+    protected void onPause() {
+        wb_news.onPause();
+        super.onPause();
+    }
+
+    @Override
+    protected void onResume() {
+        wb_news.onResume();
+        super.onResume();
+    }
+
+    @Override
+    protected void onDestroy() {
+        wb_news.destroy();
+        super.onDestroy();
+    }
+
     class MyWebClient extends WebViewClient{
         @Override
         public void onPageStarted(WebView view, String url, Bitmap favicon) {

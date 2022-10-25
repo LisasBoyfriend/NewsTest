@@ -1,11 +1,13 @@
 package com.yang.newstest.helper;
 
+import android.util.Log;
+
 import com.jakewharton.retrofit2.adapter.rxjava2.RxJava2CallAdapterFactory;
 import com.yang.newstest.bean.NewsBean;
 import com.yang.newstest.helper.requestImpl.GetZixunRequest;
-import com.yang.newstest.utils.URLUtils;
 
-import org.reactivestreams.Subscriber;
+import java.util.ArrayList;
+import java.util.List;
 
 import io.reactivex.Flowable;
 import io.reactivex.android.schedulers.AndroidSchedulers;
@@ -34,12 +36,23 @@ public class RetrofitHelper {
     }
 
     //发送请求
+    //单一请求接口
 
     public void makeRequest(String path1, String path2, Retrofit retrofit, Consumer<NewsBean> successfulConsumer, Consumer<Throwable> errorConsumer) {
         GetZixunRequest request = retrofit.create(GetZixunRequest.class);
         request.getCallUseRxJava(path1 + path2)
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribeOn(Schedulers.io())
+                .subscribe(successfulConsumer, errorConsumer);
+    }
+    //一对一请求接口(同时请求资讯和音视频)
+    public void makeRequests(String path1, String path2, Retrofit retrofit, Function<NewsBean, Flowable<NewsBean>> function, Consumer<NewsBean> successfulConsumer, Consumer<Throwable> errorConsumer){
+
+        GetZixunRequest request = retrofit.create(GetZixunRequest.class);
+        request.getCallUseRxJava(path1 + path2)
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribeOn(Schedulers.io())
+                .flatMap(function)
                 .subscribe(successfulConsumer, errorConsumer);
     }
 }

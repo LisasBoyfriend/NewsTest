@@ -7,42 +7,37 @@ import androidx.viewpager.widget.ViewPager;
 
 import android.graphics.Color;
 import android.os.Bundle;
-import android.os.Handler;
-import android.os.Message;
+
 import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.Window;
-import android.view.WindowManager;
 import android.widget.Toast;
 
 import com.google.android.material.bottomnavigation.BottomNavigationView;
-import com.google.gson.Gson;
 import com.yang.newstest.adapter.MainFraAdapter;
 import com.yang.newstest.bean.NewsBean;
 import com.yang.newstest.fragment.FragmentWode;
 import com.yang.newstest.fragment.FragmentYinshipin;
 import com.yang.newstest.fragment.FragmentZhuanti;
 import com.yang.newstest.fragment.FragmentZixun;
-import com.yang.newstest.helper.InterceptorOKHttpClient;
 import com.yang.newstest.helper.RetrofitHelper;
 import com.yang.newstest.helper.requestImpl.GetZixunRequest;
-import com.yang.newstest.utils.StringUtils;
 import com.yang.newstest.utils.URLUtils;
 
-import java.io.InputStream;
-import java.net.HttpURLConnection;
-import java.net.URL;
+
+import org.reactivestreams.Publisher;
+
 import java.util.ArrayList;
 import java.util.List;
 
+import io.reactivex.Flowable;
+import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.functions.Consumer;
-import okhttp3.OkHttpClient;
-import retrofit2.Call;
-import retrofit2.Callback;
-import retrofit2.Response;
+import io.reactivex.functions.Function;
+import io.reactivex.schedulers.Schedulers;
+
 import retrofit2.Retrofit;
-import retrofit2.converter.gson.GsonConverterFactory;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -52,8 +47,11 @@ public class MainActivity extends AppCompatActivity {
     //Retrofit获取网络
 
 //    MyHandler handler = new MyHandler();
+    List<NewsBean> allDataList = new ArrayList<>();
     List<NewsBean.DocsBean.ListBean> newsList;//传给fragment的新闻数据
-    int pageCount = 0;
+    List<NewsBean.DocsBean.ListBean> yinpinList;//音频数据
+    int pageCountOfZixun = 0;
+    int pageCountOfYinpin = 0;
 
     RetrofitHelper mRetrofitHelper;
 
@@ -74,25 +72,10 @@ public class MainActivity extends AppCompatActivity {
 //        request(URLUtils.BASE_URL);
         //RxJava+Retrofit获取网络信息
         mRetrofitHelper = new RetrofitHelper();
-        Retrofit retrofit = mRetrofitHelper.getRetrofit(URLUtils.BASE_URL);
-        mRetrofitHelper.makeRequest(URLUtils.PATH_FOR_ZIXUN_TUIJIAN, "", retrofit, new Consumer<NewsBean>() {
-            @Override
-            public void accept(NewsBean newsBean) throws Exception {
+        requestDatas();
 
-                Log.i("Main", "accept: "+newsBean.getDocs().getList().get(1).getDocTitle());
-                newsList = newsBean.getDocs().getList();
-                pageCount = newsBean.getDocs().getPager().getPageCount();
-                fragments = new ArrayList<>();
-                initFragmentData(fragments);
-                MainFraAdapter adapter = new MainFraAdapter(getSupportFragmentManager(), fragments);
-                viewPager.setAdapter(adapter);
-            }
-        }, new Consumer<Throwable>() {
-            @Override
-            public void accept(Throwable throwable) throws Exception {
-                Toast.makeText(getApplicationContext(), "请检查网络设置", Toast.LENGTH_SHORT).show();
-            }
-        });
+//        requestZixun();
+
 
 
     }
@@ -127,8 +110,8 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public void initFragmentData(List<Fragment> fragments) {
-        fragments.add(new FragmentZixun(newsList, pageCount));
-        fragments.add(new FragmentYinshipin());
+        fragments.add(new FragmentZixun(newsList, pageCountOfZixun));
+        fragments.add(new FragmentYinshipin(yinpinList, pageCountOfYinpin));
         fragments.add(new FragmentZhuanti());
         fragments.add(new FragmentWode());
     }
@@ -153,6 +136,72 @@ public class MainActivity extends AppCompatActivity {
         });
     }
 
+    public void requestZixun(){
+        Retrofit retrofit = mRetrofitHelper.getRetrofit(URLUtils.BASE_URL);
+        mRetrofitHelper.makeRequest(URLUtils.PATH_FOR_ZIXUN_TUIJIAN, "", retrofit, new Consumer<NewsBean>() {
+            @Override
+            public void accept(NewsBean newsBean) throws Exception {
+
+                Log.i("Main", "accept: "+newsBean.getDocs().getList().get(1).getDocTitle());
+                newsList = newsBean.getDocs().getList();
+                pageCountOfZixun = newsBean.getDocs().getPager().getPageCount();
+                fragments = new ArrayList<>();
+                initFragmentData(fragments);
+                MainFraAdapter adapter = new MainFraAdapter(getSupportFragmentManager(), fragments);
+                viewPager.setAdapter(adapter);
+            }
+        }, new Consumer<Throwable>() {
+            @Override
+            public void accept(Throwable throwable) throws Exception {
+                Toast.makeText(getApplicationContext(), "请检查网络设置", Toast.LENGTH_SHORT).show();
+            }
+        });
+    }
+
+    public void requestDatas(){
+        Retrofit retrofit = mRetrofitHelper.getRetrofit(URLUtils.BASE_URL);
+        GetZixunRequest request = retrofit.create(GetZixunRequest.class);
+        request.getCallUseRxJava(URLUtils.PATH_FOR_ZIXUN_TUIJIAN)
+                .subscribeOn(Schedulers.io())
+                .doOnNext(new Consumer<NewsBean>() {
+                    @Override
+                    public void accept(NewsBean newsBean) throws Exception {
+
+                        allDataList.add(newsBean);
+                    }
+                })
+                .flatMap(new Function<NewsBean, Flowable<NewsBean>>() {
+                    @Override
+                    public Flowable<NewsBean> apply(NewsBean newsBean) throws Exception {
+                        return request.getCallUseRxJava(URLUtils.PATH_FOR_YINSHIPIN_SHENGYIN);
+                    }
+                })
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(new Consumer<NewsBean>() {
+                    @Override
+                    public void accept(NewsBean newsBean) throws Exception {
+                        allDataList.add(newsBean);
+
+                        //获取到了两个页面的newBean
+
+                        newsList = allDataList.get(0).getDocs().getList();
+                        pageCountOfZixun = allDataList.get(0).getDocs().getPager().getPageCount();
+                        yinpinList = allDataList.get(1).getDocs().getList();
+                        pageCountOfYinpin = allDataList.get(1).getDocs().getPager().getPageCount();
+                        fragments = new ArrayList<>();
+                        initFragmentData(fragments);
+                        MainFraAdapter adapter = new MainFraAdapter(getSupportFragmentManager(), fragments);
+                        viewPager.setAdapter(adapter);
+
+                    }
+                }, new Consumer<Throwable>() {
+                    @Override
+                    public void accept(Throwable throwable) throws Exception {
+                        Toast.makeText(getApplicationContext(), "请检查网络设置", Toast.LENGTH_SHORT).show();
+
+                    }
+                });
+    }
 //retrofit处理网络数据
 //    public void request(String baseUrl){
 //        //获取OKHttp拦截器对象
