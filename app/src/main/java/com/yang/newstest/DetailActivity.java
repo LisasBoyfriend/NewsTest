@@ -99,8 +99,11 @@ public class DetailActivity extends AppCompatActivity {
             @Override
             public void onProgressChanged(WebView view, int newProgress) {
                 progressBar.setProgress(newProgress);
+                if (newProgress >= 90){
+                    progressBar.setProgress(90);
+                }
                 if (newProgress == 100){
-                    progressBar.setVisibility(View.GONE);
+                    progressBar.setProgress(95);
                 }
                 super.onProgressChanged(view, newProgress);
             }
@@ -113,17 +116,23 @@ public class DetailActivity extends AppCompatActivity {
         //设置自适应屏幕
         settings.setUseWideViewPort(true);
         settings.setLoadWithOverviewMode(true);
-        settings.setLayoutAlgorithm(WebSettings.LayoutAlgorithm.NORMAL);
 
         // 5.1以上默认禁止了https和http混用，以下方式是开启
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
             settings.setMixedContentMode(WebSettings.MIXED_CONTENT_ALWAYS_ALLOW);
         }
 
+        settings.setRenderPriority(WebSettings.RenderPriority.HIGH);
         settings.setLoadsImagesAutomatically(true); //支持自动加载图片
-
-        settings.setCacheMode(WebSettings.LOAD_CACHE_ELSE_NETWORK);//允许使用缓存
-
+        // 开启H5(APPCache)缓存功能
+        settings.setAppCacheEnabled(true);
+// webView数据缓存分为两种：AppCache和DOM Storage(Web Storage)。
+// 开启 DOM storage 功能
+        settings.setDomStorageEnabled(true);
+// 应用可以有数据库
+        settings.setDatabaseEnabled(true);
+        settings.setCacheMode(WebSettings.LOAD_CACHE_ELSE_NETWORK);
+        settings.setAllowFileAccess(true);
         //设置默认字体大小
         settings.setTextZoom(webViewSize);
         mWebView.addJavascriptInterface(new JsObject(), "myObject");
@@ -188,13 +197,16 @@ public class DetailActivity extends AppCompatActivity {
         @Override
         public void onPageStarted(WebView view, String url, Bitmap favicon) {
             progressBar.setVisibility(View.VISIBLE);
+
+
             super.onPageStarted(view, url, favicon);
+
         }
 
         @Override
         public void onPageFinished(WebView view, String url) {
-            progressBar.setVisibility(View.GONE);
-            super.onPageFinished(view, url);
+            Log.i(TAG, "onPageFinished: ");
+
             //添加js代码
             view.loadUrl("javascript:function img(){" +
                     "var href=document.getElementsByTagName(\"img\");" +
@@ -209,6 +221,9 @@ public class DetailActivity extends AppCompatActivity {
                     "}");
             //执行js函数
             view.loadUrl("javascript:img()");
+            super.onPageFinished(view, url);
+            progressBar.setVisibility(View.GONE);
+
 
         }
 

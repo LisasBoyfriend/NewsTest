@@ -8,15 +8,18 @@ import android.os.Bundle;
 import android.view.MotionEvent;
 import android.view.View;
 import android.widget.ImageSwitcher;
+import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.ViewSwitcher;
 
 import com.bm.library.PhotoView;
 import com.bumptech.glide.Glide;
+import com.yang.newstest.helper.GlideHelper;
 
 import java.util.ArrayList;
 import java.util.List;
 
-public class ImageActivity extends AppCompatActivity {
+public class ImageActivity extends AppCompatActivity implements View.OnClickListener {
 
     private ImageSwitcher imageSwitcher;
     private ArrayList<String> imageSrc;
@@ -27,6 +30,8 @@ public class ImageActivity extends AppCompatActivity {
     private float touchUp;
 
     private PhotoView mPhotoView;
+    private ImageView iv_back;
+    private LinearLayout linearLayout;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -53,12 +58,36 @@ public class ImageActivity extends AppCompatActivity {
     }
 
     private void initView() {
+        iv_back = findViewById(R.id.iv_back);
+        iv_back.setOnClickListener(this);
+        linearLayout = findViewById(R.id.layout_back);
         mPhotoView = findViewById(R.id.photoView);
         mPhotoView.enable();
         Glide.with(this)
                 .load(src)
+                .apply(GlideHelper.getImageActivityOptions())
+                .thumbnail(Glide.with(this).load(R.mipmap.loading2))
                 .into(mPhotoView);
+
+        mPhotoView.setOnClickListener(this);
 //        imageSwitcher = findViewById(R.id.image_switcher);
+    }
+
+    @Override
+    public void onClick(View view) {
+        switch (view.getId()) {
+            case R.id.iv_back:
+                finish();
+                break;
+            case R.id.photoView:
+                if (linearLayout.getVisibility() == View.INVISIBLE){
+                    linearLayout.setVisibility(View.VISIBLE);
+                }else {
+                    linearLayout.setVisibility(View.INVISIBLE);
+                }
+                break;
+
+        }
     }
 
 //    private void initImageSwitcher() {
