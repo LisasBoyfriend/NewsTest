@@ -52,9 +52,19 @@
         android:layout_height="2dp"
         android:max="100"/>
 
-    <WebView
-        android:id="@+id/wb_news"
+    <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        />
+        android:layout_height="match_parent">
+        <FrameLayout
+            android:id="@+id/fl_video"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:visibility="gone"/>
+        <WebView
+            android:id="@+id/wb_news"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            />
+    </RelativeLayout>
+
 </LinearLayout>

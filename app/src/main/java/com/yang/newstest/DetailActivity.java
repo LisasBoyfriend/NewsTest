@@ -6,12 +6,15 @@ import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.content.pm.ActivityInfo;
+import android.content.res.Configuration;
 import android.graphics.Bitmap;
 import android.os.Build;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.KeyEvent;
 import android.view.View;
+import android.view.WindowManager;
 import android.webkit.JavascriptInterface;
 import android.webkit.WebChromeClient;
 import android.webkit.WebResourceError;
@@ -20,6 +23,7 @@ import android.webkit.WebResourceResponse;
 import android.webkit.WebSettings;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
+import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.RadioButton;
@@ -36,13 +40,16 @@ import java.util.Arrays;
 public class DetailActivity extends AppCompatActivity {
 
     private static String TAG = "DetailActivity";
-    ImageView iv_back, iv_hearing, iv_more;
-    WebView wb_news;
-    ProgressBar progressBar;
-    String url;
-    SharedPreferences preferences;
+    private ImageView iv_back, iv_hearing, iv_more;
+    private WebView wb_news;
+    private FrameLayout mLayout;
+    private View mCustomView;
+    private WebChromeClient.CustomViewCallback mCustomViewCallback;
+    private ProgressBar progressBar;
+    private String url;
+    private SharedPreferences preferences;
 
-    int webViewSize = 0;
+    private int webViewSize = 0;
 
     public static void start(Context context) {
         Intent intent = new Intent(context, DetailActivity.class);
@@ -88,6 +95,7 @@ public class DetailActivity extends AppCompatActivity {
         progressBar = findViewById(R.id.progress);
         iv_more = findViewById(R.id.iv_more);
         wb_news = findViewById(R.id.wb_news);
+        mLayout = findViewById(R.id.fl_video);
         initWebView(wb_news);
 
         wb_news.loadUrl(url);
@@ -106,6 +114,42 @@ public class DetailActivity extends AppCompatActivity {
                     progressBar.setProgress(95);
                 }
                 super.onProgressChanged(view, newProgress);
+            }
+
+            @Override
+            public void onShowCustomView(View view, CustomViewCallback callback) {
+                super.onShowCustomView(view, callback);
+                if (mCustomView != null){
+                    callback.onCustomViewHidden();
+                    return;
+                }
+                mCustomView = view;
+                mCustomView.setVisibility(View.VISIBLE);
+                mCustomViewCallback = callback;
+                mLayout.addView(mCustomView);
+                mLayout.setVisibility(View.VISIBLE);
+                mLayout.bringToFront();
+
+                setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE);
+            }
+
+            @Override
+            public void onHideCustomView() {
+                super.onHideCustomView();
+                if (mCustomView == null){
+                    return;
+                }
+                mCustomView.setVisibility(View.GONE);
+                mLayout.removeView(mCustomView);
+                mCustomView = null;
+                mLayout.setVisibility(View.GONE);
+                try {
+                    mCustomViewCallback.onCustomViewHidden();
+                }catch (Exception e){
+
+                }
+                setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
+
             }
         });
         WebSettings settings = mWebView.getSettings();
@@ -207,6 +251,10 @@ public class DetailActivity extends AppCompatActivity {
 
     @Override
     protected void onDestroy() {
+        wb_news.setWebChromeClient(null);
+        wb_news.setWebViewClient(null);
+        wb_news.getSettings().setJavaScriptEnabled(false);
+        wb_news.clearCache(true);
         wb_news.destroy();
         super.onDestroy();
     }
@@ -237,8 +285,17 @@ public class DetailActivity extends AppCompatActivity {
                     "\t\t \t   };\n" +
                     "\t\t }" +
                     "}");
+            view.loadUrl("function video() {\n" +
+                    "\t\t\t\tvar href = document.getElementById(\"videoPoster\");\n" +
+                    "\t\t\t\tvar a = href.getElementsByTagName(\"source\");\n" +
+                    "\t\t\t\tfor (var i = 0; i < a.length; i++) {\n" +
+                    "\t\t\t\t\twindow.myObject.showVideo(a[0].src);\n" +
+                    "\t\t\t\t}\n" +
+                    "\t\t\t}");
             //执行js函数
             view.loadUrl("javascript:img()");
+            view.loadUrl("javascript:video()");
+
             super.onPageFinished(view, url);
             progressBar.setVisibility(View.GONE);
 
@@ -264,6 +321,31 @@ public class DetailActivity extends AppCompatActivity {
             ImageActivity.start(DetailActivity.this, srcsList, src, position);
             Log.i(TAG, "showImage: "+src);
         }
+        @JavascriptInterface
+        public void showVideo(String src){
+            Toast.makeText(getApplicationContext(), "555", Toast.LENGTH_SHORT).show();
+            Log.i(TAG, "showVideo: "+src);
+
+        }
     }
+
+    /**
+     * 横竖屏切换监听
+     */
+    @Override
+    public void onConfigurationChanged(Configuration config) {
+        super.onConfigurationChanged(config);
+        switch (config.orientation) {
+            case Configuration.ORIENTATION_LANDSCAPE:
+                getWindow().clearFlags(WindowManager.LayoutParams.FLAG_FORCE_NOT_FULLSCREEN);
+                getWindow().addFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN);
+                break;
+            case Configuration.ORIENTATION_PORTRAIT:
+                getWindow().clearFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN);
+                getWindow().addFlags(WindowManager.LayoutParams.FLAG_FORCE_NOT_FULLSCREEN);
+                break;
+        }
+    }
+
 
 }

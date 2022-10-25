@@ -22,6 +22,8 @@
             android:name=".DetailActivity"
             android:exported="true"
             android:launchMode="singleTop"
+            android:configChanges="keyboardHidden|orientation|screenSize"
+            android:hardwareAccelerated = "true"
             android:theme="@style/WhiteStyle" />
         <activity
             android:name=".SplashActivity"
