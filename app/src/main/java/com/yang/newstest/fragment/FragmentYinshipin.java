@@ -80,7 +80,7 @@ public class FragmentYinshipin extends Fragment {
     }
 
     public void initView(View view) {
-        recyclerView = view.findViewById(R.id.rv_fra_zixun);
+        recyclerView = view.findViewById(R.id.rv_fra_yinshipin);
         mSmartRefreshLayout = view.findViewById(R.id.sml);
     }
 

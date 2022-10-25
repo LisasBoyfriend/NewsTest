@@ -50,8 +50,12 @@ public class MainActivity extends AppCompatActivity {
     List<NewsBean> allDataList = new ArrayList<>();
     List<NewsBean.DocsBean.ListBean> newsList;//传给fragment的新闻数据
     List<NewsBean.DocsBean.ListBean> yinpinList;//音频数据
+    List<NewsBean.DocsBean.ListBean> shipinList;//视频数据
+
     int pageCountOfZixun = 0;
     int pageCountOfYinpin = 0;
+    int pageCountOfShipin = 0;
+
 
     RetrofitHelper mRetrofitHelper;
 
@@ -112,7 +116,7 @@ public class MainActivity extends AppCompatActivity {
     public void initFragmentData(List<Fragment> fragments) {
         fragments.add(new FragmentZixun(newsList, pageCountOfZixun));
         fragments.add(new FragmentYinshipin(yinpinList, pageCountOfYinpin));
-        fragments.add(new FragmentZhuanti());
+        fragments.add(new FragmentZhuanti(shipinList, pageCountOfShipin));
         fragments.add(new FragmentWode());
     }
 
@@ -136,44 +140,45 @@ public class MainActivity extends AppCompatActivity {
         });
     }
 
-    public void requestZixun(){
-        Retrofit retrofit = mRetrofitHelper.getRetrofit(URLUtils.BASE_URL);
-        mRetrofitHelper.makeRequest(URLUtils.PATH_FOR_ZIXUN_TUIJIAN, "", retrofit, new Consumer<NewsBean>() {
-            @Override
-            public void accept(NewsBean newsBean) throws Exception {
-
-                Log.i("Main", "accept: "+newsBean.getDocs().getList().get(1).getDocTitle());
-                newsList = newsBean.getDocs().getList();
-                pageCountOfZixun = newsBean.getDocs().getPager().getPageCount();
-                fragments = new ArrayList<>();
-                initFragmentData(fragments);
-                MainFraAdapter adapter = new MainFraAdapter(getSupportFragmentManager(), fragments);
-                viewPager.setAdapter(adapter);
-            }
-        }, new Consumer<Throwable>() {
-            @Override
-            public void accept(Throwable throwable) throws Exception {
-                Toast.makeText(getApplicationContext(), "请检查网络设置", Toast.LENGTH_SHORT).show();
-            }
-        });
-    }
+//    public void requestZixun(){
+//        Retrofit retrofit = mRetrofitHelper.getRetrofit(URLUtils.BASE_URL);
+//        mRetrofitHelper.makeRequest(URLUtils.PATH_FOR_ZIXUN_TUIJIAN, "", retrofit, new Consumer<NewsBean>() {
+//            @Override
+//            public void accept(NewsBean newsBean) throws Exception {
+//
+//                Log.i("Main", "accept: "+newsBean.getDocs().getList().get(1).getDocTitle());
+//                newsList = newsBean.getDocs().getList();
+//                pageCountOfZixun = newsBean.getDocs().getPager().getPageCount();
+//                fragments = new ArrayList<>();
+//                initFragmentData(fragments);
+//                MainFraAdapter adapter = new MainFraAdapter(getSupportFragmentManager(), fragments);
+//                viewPager.setAdapter(adapter);
+//            }
+//        }, new Consumer<Throwable>() {
+//            @Override
+//            public void accept(Throwable throwable) throws Exception {
+//                Toast.makeText(getApplicationContext(), "请检查网络设置", Toast.LENGTH_SHORT).show();
+//            }
+//        });
+//    }
 
     public void requestDatas(){
         Retrofit retrofit = mRetrofitHelper.getRetrofit(URLUtils.BASE_URL);
         GetZixunRequest request = retrofit.create(GetZixunRequest.class);
         request.getCallUseRxJava(URLUtils.PATH_FOR_ZIXUN_TUIJIAN)
                 .subscribeOn(Schedulers.io())
-                .doOnNext(new Consumer<NewsBean>() {
+                .flatMap(new Function<NewsBean, Flowable<NewsBean>>() {
                     @Override
-                    public void accept(NewsBean newsBean) throws Exception {
-
+                    public Flowable<NewsBean> apply(NewsBean newsBean) throws Exception {
                         allDataList.add(newsBean);
+                        return request.getCallUseRxJava(URLUtils.PATH_FOR_YINSHIPIN_SHENGYIN);
                     }
                 })
                 .flatMap(new Function<NewsBean, Flowable<NewsBean>>() {
                     @Override
                     public Flowable<NewsBean> apply(NewsBean newsBean) throws Exception {
-                        return request.getCallUseRxJava(URLUtils.PATH_FOR_YINSHIPIN_SHENGYIN);
+                        allDataList.add(newsBean);
+                        return request.getCallUseRxJava(URLUtils.PATH_FOR_YINSHIPIN_SHIPIN);
                     }
                 })
                 .observeOn(AndroidSchedulers.mainThread())
@@ -182,12 +187,14 @@ public class MainActivity extends AppCompatActivity {
                     public void accept(NewsBean newsBean) throws Exception {
                         allDataList.add(newsBean);
 
-                        //获取到了两个页面的newBean
+                        //获取到了3个接口的newBean
 
                         newsList = allDataList.get(0).getDocs().getList();
                         pageCountOfZixun = allDataList.get(0).getDocs().getPager().getPageCount();
                         yinpinList = allDataList.get(1).getDocs().getList();
                         pageCountOfYinpin = allDataList.get(1).getDocs().getPager().getPageCount();
+                        shipinList = allDataList.get(2).getDocs().getList();
+                        pageCountOfShipin = allDataList.get(2).getDocs().getPager().getPageCount();
                         fragments = new ArrayList<>();
                         initFragmentData(fragments);
                         MainFraAdapter adapter = new MainFraAdapter(getSupportFragmentManager(), fragments);

@@ -14,6 +14,7 @@ public class URLUtils {
     public static final String PATH_FOR_ZIXUN_TUIJIAN = "/app_pub/zixun/tuijian/";
     public static final String PATH_FOR_ZIXUN_TOUTIAO = "/app_pub/zixun/toutiao/";
     public static final String PATH_FOR_YINSHIPIN_SHENGYIN = "/app_pub/ysp/shengyin/";
+    public static final String PATH_FOR_YINSHIPIN_SHIPIN = "/app_pub/ysp/shipin/";
 
     public String getHttpResponse(String url) {
         StringBuilder stringBuilder = new StringBuilder();
