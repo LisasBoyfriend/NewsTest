@@ -169,6 +169,7 @@ public class DetailActivity extends GSYBaseActivityDetail<StandardGSYVideoPlayer
                 mLayout.addView(mCustomView);
                 mLayout.setVisibility(View.VISIBLE);
                 mLayout.bringToFront();
+                layout_video.setVisibility(View.GONE);
 
                 setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE);
             }
@@ -188,6 +189,7 @@ public class DetailActivity extends GSYBaseActivityDetail<StandardGSYVideoPlayer
                 } catch (Exception e) {
 
                 }
+                layout_video.setVisibility(View.VISIBLE);
                 setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
 
             }

@@ -162,6 +162,7 @@ public class MainActivity extends AppCompatActivity {
 //        });
 //    }
 
+    //请求fragment显示数据
     public void requestDatas(){
         Retrofit retrofit = mRetrofitHelper.getRetrofit(URLUtils.BASE_URL);
         GetZixunRequest request = retrofit.create(GetZixunRequest.class);
