@@ -455,10 +455,65 @@ public class NewsBean {
             }
 
             public static class VideoBean {
+                private String url;
+                private String url2;
+                private String duration;
+                private String fsize;
+
+                public String getUrl() {
+                    return url;
+                }
+
+                public void setUrl(String url) {
+                    this.url = url;
+                }
+
+                public String getUrl2() {
+                    return url2;
+                }
+
+                public void setUrl2(String url2) {
+                    this.url2 = url2;
+                }
+
+                public String getDuration() {
+                    return duration;
+                }
+
+                public void setDuration(String duration) {
+                    this.duration = duration;
+                }
+
+                public String getFsize() {
+                    return fsize;
+                }
+
+                public void setFsize(String fsize) {
+                    this.fsize = fsize;
+                }
             }
 
             public static class AudioBean {
+                private String url;
+                private String duration;
+
+                public String getUrl() {
+                    return url;
+                }
+
+                public void setUrl(String url) {
+                    this.url = url;
+                }
+
+                public String getDuration() {
+                    return duration;
+                }
+
+                public void setDuration(String duration) {
+                    this.duration = duration;
+                }
             }
+
 
             public static class ChannelBean {
                 private String channelId;

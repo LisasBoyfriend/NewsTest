@@ -19,6 +19,8 @@ import com.yang.newstest.UniteApplication;
 import com.yang.newstest.bean.NewsBean;
 import com.yang.newstest.utils.StringUtils;
 
+import java.util.List;
+
 public class NewsBean2ViewBinder extends ItemViewBinder<NewsBean.DocsBean.ListBean, NewsBean2ViewBinder.ViewHolder> {
     @NonNull
     @Override
@@ -32,7 +34,7 @@ public class NewsBean2ViewBinder extends ItemViewBinder<NewsBean.DocsBean.ListBe
         viewHolder.tv_news_title.setText(listBean.getListTitle());
         viewHolder.tv_news_author.setText(listBean.getAuthor());
         viewHolder.tv_news_time.setText(StringUtils.resetTimeArray(listBean.getPubTime()));
-        if (listBean.getImgUrls().size() > 0){
+        if (listBean.getImgUrls().size() > 0) {
             Glide.with(viewHolder.itemView)
                     .load(listBean.getImgUrls().get(0))
                     .placeholder(R.mipmap.loading)
@@ -43,7 +45,22 @@ public class NewsBean2ViewBinder extends ItemViewBinder<NewsBean.DocsBean.ListBe
             public void onClick(View view) {
                 Log.i("ViewBinding2", "onClick: ");
                 String url = listBean.getLinkUrl();
-                DetailActivity.start(UniteApplication.getContext(), url);          }
+
+                if (listBean.getLabel().equals("视频")) {
+                    String videoUrl = listBean.getVideo().getUrl();
+                    List<String> imgUrls = listBean.getImgUrls();
+                    String imageUrl = "";
+                    String docuTitle = listBean.getDocTitle();
+                    if (imgUrls.size() > 0){
+                        imageUrl = imgUrls.get(0);
+                    }
+                    DetailActivity.start(UniteApplication.getContext(), url, videoUrl, imageUrl, docuTitle);
+
+                } else {
+                    DetailActivity.start(UniteApplication.getContext(), url);
+
+                }
+            }
         });
     }
 

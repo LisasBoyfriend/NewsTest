@@ -25,30 +25,41 @@ import android.webkit.WebView;
 import android.webkit.WebViewClient;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.bumptech.glide.Glide;
+import com.bumptech.glide.request.RequestOptions;
 import com.google.android.material.bottomsheet.BottomSheetDialog;
+import com.shuyu.gsyvideoplayer.GSYBaseActivityDetail;
+import com.shuyu.gsyvideoplayer.builder.GSYVideoOptionBuilder;
+import com.shuyu.gsyvideoplayer.utils.OrientationUtils;
+import com.shuyu.gsyvideoplayer.video.StandardGSYVideoPlayer;
 import com.yang.newstest.utils.SharePreUtils;
 
 import java.util.ArrayList;
 import java.util.Arrays;
 
-public class DetailActivity extends AppCompatActivity {
+public class DetailActivity extends GSYBaseActivityDetail<StandardGSYVideoPlayer> {
 
     private static String TAG = "DetailActivity";
     private ImageView iv_back, iv_hearing, iv_more;
     private WebView wb_news;
     private FrameLayout mLayout;
+    private LinearLayout layout_video;
+    private StandardGSYVideoPlayer gsy_player;
     private View mCustomView;
     private WebChromeClient.CustomViewCallback mCustomViewCallback;
     private ProgressBar progressBar;
-    private String url;
+    private String url, videoUrl, imageUrl, docuTitle;
     private SharedPreferences preferences;
+    private Boolean isPlay, isPause;
 
+    private OrientationUtils orientationUtils;
     private int webViewSize = 0;
 
     public static void start(Context context) {
@@ -64,11 +75,25 @@ public class DetailActivity extends AppCompatActivity {
         context.startActivity(intent);
     }
 
+    public static void start(Context context, String linkUrl, String videoUrl, String imageUrl, String docuTitle){
+        Intent intent = new Intent(context, DetailActivity.class);
+        intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+        intent.putExtra("url", linkUrl);
+        intent.putExtra("video_url", videoUrl);
+        intent.putExtra("image_url", imageUrl);
+        intent.putExtra("docu_title", docuTitle);
+        context.startActivity(intent);
+    }
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_detail);
         url = getIntent().getStringExtra("url");
+        videoUrl = getIntent().getStringExtra("video_url");
+        imageUrl = getIntent().getStringExtra("image_url");
+        docuTitle = getIntent().getStringExtra("docu_title");
+
 
         preferences = SharePreUtils.getSharedPreferences(SharePreUtils.WEBVIEW_INFO, MODE_PRIVATE);
         webViewSize = SharePreUtils.getIntInfoFromSP(SharePreUtils.WEBVIEW_SIZE, preferences);
@@ -96,21 +121,36 @@ public class DetailActivity extends AppCompatActivity {
         iv_more = findViewById(R.id.iv_more);
         wb_news = findViewById(R.id.wb_news);
         mLayout = findViewById(R.id.fl_video);
+        layout_video = findViewById(R.id.layout_video);
+        gsy_player = findViewById(R.id.gsy_player);
+        //增加title
+        gsy_player.getTitleTextView().setVisibility(View.GONE);
+        gsy_player.getBackButton().setVisibility(View.GONE);
+
+        initVideoBuilderMode();
+        if (videoUrl != null){
+            layout_video.setVisibility(View.VISIBLE);
+            gsy_player.setVisibility(View.VISIBLE);
+        }
+
+
+
         initWebView(wb_news);
 
         wb_news.loadUrl(url);
     }
 
+
     private void initWebView(WebView mWebView) {
         mWebView.setWebViewClient(new MyWebClient());
-        mWebView.setWebChromeClient(new WebChromeClient(){
+        mWebView.setWebChromeClient(new WebChromeClient() {
             @Override
             public void onProgressChanged(WebView view, int newProgress) {
                 progressBar.setProgress(newProgress);
-                if (newProgress >= 90){
+                if (newProgress >= 90) {
                     progressBar.setProgress(90);
                 }
-                if (newProgress == 100){
+                if (newProgress == 100) {
                     progressBar.setProgress(95);
                 }
                 super.onProgressChanged(view, newProgress);
@@ -119,7 +159,7 @@ public class DetailActivity extends AppCompatActivity {
             @Override
             public void onShowCustomView(View view, CustomViewCallback callback) {
                 super.onShowCustomView(view, callback);
-                if (mCustomView != null){
+                if (mCustomView != null) {
                     callback.onCustomViewHidden();
                     return;
                 }
@@ -136,7 +176,7 @@ public class DetailActivity extends AppCompatActivity {
             @Override
             public void onHideCustomView() {
                 super.onHideCustomView();
-                if (mCustomView == null){
+                if (mCustomView == null) {
                     return;
                 }
                 mCustomView.setVisibility(View.GONE);
@@ -145,7 +185,7 @@ public class DetailActivity extends AppCompatActivity {
                 mLayout.setVisibility(View.GONE);
                 try {
                     mCustomViewCallback.onCustomViewHidden();
-                }catch (Exception e){
+                } catch (Exception e) {
 
                 }
                 setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
@@ -259,7 +299,7 @@ public class DetailActivity extends AppCompatActivity {
         super.onDestroy();
     }
 
-    class MyWebClient extends WebViewClient{
+    class MyWebClient extends WebViewClient {
         @Override
         public void onPageStarted(WebView view, String url, Bitmap favicon) {
             progressBar.setVisibility(View.VISIBLE);
@@ -276,25 +316,25 @@ public class DetailActivity extends AppCompatActivity {
             //添加js代码
             view.loadUrl("javascript:function img(){" +
                     "var href=document.getElementsByTagName(\"img\");" +
-                    "var srcs = [];\n"+
+                    "var srcs = [];\n" +
                     "\t\t for(var i=0;i<href.length;i++){\n" +
                     "\t\t \t   var a=document.getElementsByTagName(\"img\")[i];\n" +
-                    "\t\t \t   srcs[i]=a.src;\n"+
+                    "\t\t \t   srcs[i]=a.src;\n" +
                     "\t\t \t   a.onclick=function(){\n" +
                     "\t\t \t        window.myObject.showImage(this.src, srcs, i)" +
                     "\t\t \t   };\n" +
                     "\t\t }" +
                     "}");
-            view.loadUrl("function video() {\n" +
-                    "\t\t\t\tvar href = document.getElementById(\"videoPoster\");\n" +
-                    "\t\t\t\tvar a = href.getElementsByTagName(\"source\");\n" +
-                    "\t\t\t\tfor (var i = 0; i < a.length; i++) {\n" +
-                    "\t\t\t\t\twindow.myObject.showVideo(a[0].src);\n" +
-                    "\t\t\t\t}\n" +
-                    "\t\t\t}");
+//            view.loadUrl("function video() {\n" +
+//                    "\t\t\t\tvar href = document.getElementById(\"videoPoster\");\n" +
+//                    "\t\t\t\tvar a = href.getElementsByTagName(\"source\");\n" +
+//                    "\t\t\t\tfor (var i = 0; i < a.length; i++) {\n" +
+//                    "\t\t\t\t\thref.parentNode.removeChild(href);\n" +
+//                    "\t\t\t\t}\n" +
+//                    "\t\t\t}");
             //执行js函数
             view.loadUrl("javascript:img()");
-            view.loadUrl("javascript:video()");
+//            view.loadUrl("javascript:video()");
 
             super.onPageFinished(view, url);
             progressBar.setVisibility(View.GONE);
@@ -314,17 +354,19 @@ public class DetailActivity extends AppCompatActivity {
 
 
     }
-    class JsObject{
+
+    class JsObject {
         @JavascriptInterface
-        public void showImage(String src, String[] srcs, int position){
+        public void showImage(String src, String[] srcs, int position) {
             ArrayList<String> srcsList = (ArrayList<String>) new ArrayList<>(Arrays.asList(srcs));
             ImageActivity.start(DetailActivity.this, srcsList, src, position);
-            Log.i(TAG, "showImage: "+src);
+            Log.i(TAG, "showImage: " + src);
         }
+
         @JavascriptInterface
-        public void showVideo(String src){
+        public void showVideo(String src) {
             Toast.makeText(getApplicationContext(), "555", Toast.LENGTH_SHORT).show();
-            Log.i(TAG, "showVideo: "+src);
+            Log.i(TAG, "showVideo: " + src);
 
         }
     }
@@ -345,6 +387,53 @@ public class DetailActivity extends AppCompatActivity {
                 getWindow().addFlags(WindowManager.LayoutParams.FLAG_FORCE_NOT_FULLSCREEN);
                 break;
         }
+    }
+
+    @Override
+    public StandardGSYVideoPlayer getGSYVideoPlayer() {
+        return gsy_player;
+    }
+
+    @Override
+    public GSYVideoOptionBuilder getGSYVideoOptionBuilder() {
+        ImageView imageView = new ImageView(this);
+        loadCover(imageView, imageUrl);
+        return new GSYVideoOptionBuilder()
+                .setThumbImageView(imageView)
+                .setUrl(videoUrl)
+                .setCacheWithPlay(true)
+                .setVideoTitle(docuTitle)
+                .setIsTouchWiget(true)
+                //.setAutoFullWithSize(true)
+                .setRotateViewAuto(false)
+                .setLockLand(false)
+                .setShowFullAnimation(false)//打开动画
+                .setNeedLockFull(true)
+                .setSeekRatio(1);
+    }
+
+    @Override
+    public void clickForFullScreen() {
+
+    }
+
+    @Override
+    public boolean getDetailOrientationRotateAuto() {
+        return true;
+    }
+
+    private void loadCover(ImageView imageView, String url) {
+        imageView.setScaleType(ImageView.ScaleType.CENTER_CROP);
+        imageView.setImageResource(R.mipmap.loading2);
+        Glide.with(this.getApplicationContext())
+                .setDefaultRequestOptions(
+                        new RequestOptions()
+                                .frame(3000000)
+                                .centerCrop()
+                                .error(R.mipmap.error)
+                                .placeholder(R.mipmap.loading2))
+                .load(url)
+                .into(imageView);
     }
 
 
