@@ -46,7 +46,7 @@ public class NewsBean2ViewBinder extends ItemViewBinder<NewsBean.DocsBean.ListBe
                 Log.i("ViewBinding2", "onClick: ");
                 String url = listBean.getLinkUrl();
 
-                if (listBean.getLabel().equals("视频")) {
+                if (listBean.getChannel().getChannelId().equals("8")) {
                     String videoUrl = listBean.getVideo().getUrl();
                     List<String> imgUrls = listBean.getImgUrls();
                     String imageUrl = "";
