@@ -1,42 +1,61 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:background="@color/black"
-    tools:context=".ImageActivity"
-    android:orientation="vertical">
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <data>
+        <variable
+            name="handler"
+            type="com.yang.newstest.ImageActivity.MyHandler" />
+        <variable
+            name="imageData"
+            type="com.yang.newstest.viewmodel.ImageActivityModel" />
+
+    </data>
 
     <LinearLayout
-        android:id="@+id/layout_back"
         android:layout_width="match_parent"
-        android:layout_height="50dp"
-        android:orientation="horizontal"
-        android:visibility="invisible"
-        android:background="@color/translate_white">
-        <ImageView
-            android:id="@+id/iv_back"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginLeft="10dp"
-            android:src="@drawable/ic__back_24_white"
-            android:layout_gravity="center"/>
+        android:layout_height="match_parent"
+        android:background="@color/black"
+        tools:context=".ImageActivity"
+        android:orientation="vertical">
+
+        <LinearLayout
+            android:id="@+id/layout_back"
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            android:orientation="horizontal"
+            android:visibility="invisible"
+            android:background="@color/translate_white">
+
+            <ImageView
+                android:id="@+id/iv_back"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="10dp"
+                android:clickable="true"
+                android:onClick="@{handler::back}"
+                android:src="@drawable/ic__back_24_white"
+                android:layout_gravity="center" />
+        </LinearLayout>
+
+        <com.bm.library.PhotoView
+            android:id="@+id/photoView"
+            android:layout_marginTop="50dp"
+            android:layout_marginBottom="50dp"
+            android:layout_gravity="center"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:clickable="true"
+            android:onClick="@{handler::setLayoutVisibility}"/>
+        <!--    <ImageSwitcher-->
+        <!--        android:id="@+id/image_switcher"-->
+        <!--        android:layout_width="match_parent"-->
+        <!--        android:layout_height="match_parent"-->
+        <!--        android:paddingTop="50dp"-->
+        <!--        android:paddingBottom="50dp">-->
+
+        <!--    </ImageSwitcher>-->
+
     </LinearLayout>
-    <com.bm.library.PhotoView
-        android:id="@+id/photoView"
-        android:layout_marginTop="50dp"
-        android:layout_marginBottom="50dp"
-        android:layout_gravity="center"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"/>
-<!--    <ImageSwitcher-->
-<!--        android:id="@+id/image_switcher"-->
-<!--        android:layout_width="match_parent"-->
-<!--        android:layout_height="match_parent"-->
-<!--        android:paddingTop="50dp"-->
-<!--        android:paddingBottom="50dp">-->
-
-<!--    </ImageSwitcher>-->
-
-</LinearLayout>
+</layout>

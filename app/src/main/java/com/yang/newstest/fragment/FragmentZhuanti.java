@@ -52,7 +52,9 @@ public class FragmentZhuanti extends Fragment {
 
     int pageCount = 0;
     int pageNow = 0;
+    public FragmentZhuanti(){
 
+    }
     public FragmentZhuanti(List<NewsBean.DocsBean.ListBean> data, int pageCount){
         this.mData = data;
         this.pageCount = pageCount;

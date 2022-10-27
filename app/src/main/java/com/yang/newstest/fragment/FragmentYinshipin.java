@@ -51,6 +51,9 @@ public class FragmentYinshipin extends Fragment {
     List<NewsBean.DocsBean.ListBean> mData = new ArrayList<>();
 //    NewsBean.DocsBean docsBean;
     List<Object> data = new ArrayList<>();
+    public FragmentYinshipin(){
+
+    }
 
     public FragmentYinshipin(List<NewsBean.DocsBean.ListBean> data, int pageCount) {
 

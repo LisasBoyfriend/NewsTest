@@ -1,52 +1,68 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="match_parent"
-    android:layout_height="110dp"
-    android:padding="10dp"
-    android:orientation="vertical"
-    android:background="@drawable/selector_item">
-    <TextView
-        android:id="@+id/tv_news_title"
+<layout xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <data>
+
+        <import type="com.yang.newstest.utils.StringUtils" />
+
+        <variable
+            name="listBean"
+            type="com.yang.newstest.bean.NewsBean.DocsBean.ListBean" />
+    </data>
+
+    <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:paddingTop="5dp"
-        android:textSize="16sp"
-        android:textColor="@color/black"
-        android:text="这是一段示例新闻标题,习近平参加党的二十大广西代表团"/>
-    <RelativeLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:paddingTop="5dp"
-        android:orientation="horizontal">
+        android:layout_height="110dp"
+        android:background="@drawable/selector_item"
+        android:orientation="vertical"
+        android:padding="10dp">
+
         <TextView
-            android:id="@+id/tv_news_author"
-            android:layout_width="wrap_content"
+            android:id="@+id/tv_news_title"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_alignParentLeft="true"
-            android:layout_alignParentBottom="true"
-            android:textColor="@color/grey"
-            android:textSize="13sp"
-            android:text="作者"/>
-        <TextView
-            android:id="@+id/tv_news_time"
-            android:layout_width="wrap_content"
+            android:paddingTop="5dp"
+            android:text="@{listBean.listTitle}"
+            android:textColor="@color/black"
+            android:textSize="16sp" />
+
+        <RelativeLayout
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:textColor="@color/grey"
-            android:textSize="13sp"
-            android:paddingLeft="10dp"
-            android:layout_alignParentBottom="true"
-            android:layout_toRightOf="@id/tv_news_author"
-            android:text="发布时间"/>
+            android:orientation="horizontal"
+            android:paddingTop="5dp">
 
-        <ImageView
-            android:id="@+id/iv_news_turn_on"
-            android:layout_width="25dp"
-            android:layout_height="25dp"
-            android:layout_alignParentRight="true"
-            android:paddingRight="10dp"
-            android:layout_alignParentBottom="true"
-            android:src="@mipmap/title_horn"/>
-    </RelativeLayout>
+            <TextView
+                android:id="@+id/tv_news_author"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentLeft="true"
+                android:layout_alignParentBottom="true"
+                android:text="@{listBean.author}"
+                android:textColor="@color/grey"
+                android:textSize="13sp" />
+
+            <TextView
+                android:id="@+id/tv_news_time"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentBottom="true"
+                android:layout_toRightOf="@id/tv_news_author"
+                android:paddingLeft="10dp"
+                android:text="@{StringUtils.resetTimeArray(listBean.pubTime)}"
+                android:textColor="@color/grey"
+                android:textSize="13sp" />
+
+            <ImageView
+                android:id="@+id/iv_news_turn_on"
+                android:layout_width="25dp"
+                android:layout_height="25dp"
+                android:layout_alignParentRight="true"
+                android:layout_alignParentBottom="true"
+                android:paddingRight="10dp"
+                android:src="@mipmap/title_horn" />
+        </RelativeLayout>
 
 
-</LinearLayout>
+    </LinearLayout>
+</layout>

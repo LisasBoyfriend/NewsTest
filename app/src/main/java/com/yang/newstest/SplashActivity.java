@@ -1,6 +1,7 @@
 package com.yang.newstest;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.databinding.DataBindingUtil;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -13,6 +14,7 @@ import android.view.WindowManager;
 import android.widget.FrameLayout;
 import android.widget.TextView;
 
+import com.yang.newstest.databinding.ActivitySplashBinding;
 import com.yang.newstest.utils.AppUtils;
 
 import java.util.Observable;
@@ -26,11 +28,12 @@ import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.functions.Consumer;
 import io.reactivex.schedulers.Schedulers;
 
-public class SplashActivity extends AppCompatActivity implements View.OnClickListener {
+public class SplashActivity extends AppCompatActivity{
     TextView tv_time;
     FrameLayout layout_start_skip;
     MCountDownTimer mCountDownTimer;
     private static Boolean isExit;
+    ActivitySplashBinding binding;
 
 //    Handler handler = new Handler();
 //    Runnable mRunnable;
@@ -38,7 +41,7 @@ public class SplashActivity extends AppCompatActivity implements View.OnClickLis
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_splash);
+        binding = DataBindingUtil.setContentView(this, R.layout.activity_splash);
 
         initView();
 
@@ -90,9 +93,9 @@ public class SplashActivity extends AppCompatActivity implements View.OnClickLis
     }
 
     private void initView() {
-        tv_time = findViewById(R.id.tv_start_skip_count_down);
+        tv_time = binding.tvStartSkipCountDown;
 
-        layout_start_skip = findViewById(R.id.layout_start_skip);
+        layout_start_skip = binding.layoutStartSkip;
         tv_time.setText("3" + getString(R.string.click_to_skip));
         isExit = false;
     }
@@ -108,7 +111,14 @@ public class SplashActivity extends AppCompatActivity implements View.OnClickLis
         super.onDestroy();
     }
 
-    @Override
+    public class Handlers{
+        public void skip(View view){
+            turnToMain();
+            finish();
+            isExit = true;
+        }
+    }
+
     public void onClick(View view) {
         switch (view.getId()) {
             case R.id.layout_start_skip:

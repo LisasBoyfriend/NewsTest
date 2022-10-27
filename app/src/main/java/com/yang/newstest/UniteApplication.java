@@ -6,6 +6,7 @@ import android.content.SharedPreferences;
 import android.os.Build;
 import android.webkit.WebView;
 
+import com.bumptech.glide.request.target.ViewTarget;
 import com.yang.newstest.utils.SharePreUtils;
 
 public class UniteApplication extends Application {
@@ -16,6 +17,7 @@ public class UniteApplication extends Application {
     public void onCreate() {
         context = getApplicationContext();
         super.onCreate();
+        ViewTarget.setTagId(R.id.glide_tag);
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
             WebView.setWebContentsDebuggingEnabled(true);
         }

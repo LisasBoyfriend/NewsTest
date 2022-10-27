@@ -1,6 +1,7 @@
 package com.yang.newstest;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.databinding.DataBindingUtil;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
@@ -39,6 +40,7 @@ import com.shuyu.gsyvideoplayer.GSYBaseActivityDetail;
 import com.shuyu.gsyvideoplayer.builder.GSYVideoOptionBuilder;
 import com.shuyu.gsyvideoplayer.utils.OrientationUtils;
 import com.shuyu.gsyvideoplayer.video.StandardGSYVideoPlayer;
+import com.yang.newstest.databinding.ActivityDetailBinding;
 import com.yang.newstest.utils.SharePreUtils;
 
 import java.util.ArrayList;
@@ -58,6 +60,7 @@ public class DetailActivity extends GSYBaseActivityDetail<StandardGSYVideoPlayer
     private String url, videoUrl, imageUrl, docuTitle;
     private SharedPreferences preferences;
     private Boolean isPlay, isPause;
+    ActivityDetailBinding binding;
 
     private OrientationUtils orientationUtils;
     private int webViewSize = 0;
@@ -88,7 +91,7 @@ public class DetailActivity extends GSYBaseActivityDetail<StandardGSYVideoPlayer
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_detail);
+        binding = DataBindingUtil.setContentView(this, R.layout.activity_detail);
         url = getIntent().getStringExtra("url");
         videoUrl = getIntent().getStringExtra("video_url");
         imageUrl = getIntent().getStringExtra("image_url");
@@ -115,14 +118,14 @@ public class DetailActivity extends GSYBaseActivityDetail<StandardGSYVideoPlayer
     }
 
     private void initView() {
-        iv_back = findViewById(R.id.iv_back);
-        iv_hearing = findViewById(R.id.iv_hearing);
-        progressBar = findViewById(R.id.progress);
-        iv_more = findViewById(R.id.iv_more);
-        wb_news = findViewById(R.id.wb_news);
-        mLayout = findViewById(R.id.fl_video);
-        layout_video = findViewById(R.id.layout_video);
-        gsy_player = findViewById(R.id.gsy_player);
+        iv_back = binding.ivBack;
+        iv_hearing = binding.ivHearing;
+        progressBar = binding.progress;
+        iv_more = binding.ivMore;
+        wb_news = binding.wbNews;
+        mLayout = binding.flVideo;
+        layout_video = binding.layoutVideo;
+        gsy_player = binding.gsyPlayer;
         //增加title
         gsy_player.getTitleTextView().setVisibility(View.GONE);
         gsy_player.getBackButton().setVisibility(View.GONE);

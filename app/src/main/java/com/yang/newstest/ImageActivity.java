@@ -1,6 +1,7 @@
 package com.yang.newstest;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.databinding.DataBindingUtil;
 
 import android.content.Context;
 import android.content.Intent;
@@ -14,13 +15,15 @@ import android.widget.ViewSwitcher;
 
 import com.bm.library.PhotoView;
 import com.bumptech.glide.Glide;
+import com.yang.newstest.databinding.ActivityImageBinding;
 import com.yang.newstest.helper.GlideHelper;
 
 import java.util.ArrayList;
 import java.util.List;
 
-public class ImageActivity extends AppCompatActivity implements View.OnClickListener {
+public class ImageActivity extends AppCompatActivity  {
 
+    ActivityImageBinding binding;
     private ImageSwitcher imageSwitcher;
     private ArrayList<String> imageSrc;
     private String src;
@@ -35,7 +38,8 @@ public class ImageActivity extends AppCompatActivity implements View.OnClickList
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_image);
+        binding = DataBindingUtil.setContentView(this, R.layout.activity_image);
+//        setContentView(R.layout.activity_image);
         imageSrc = getIntent().getStringArrayListExtra("image_srcs");
         src = getIntent().getStringExtra("image_src");
         position = getIntent().getIntExtra("position", 0);
@@ -58,10 +62,9 @@ public class ImageActivity extends AppCompatActivity implements View.OnClickList
     }
 
     private void initView() {
-        iv_back = findViewById(R.id.iv_back);
-        iv_back.setOnClickListener(this);
-        linearLayout = findViewById(R.id.layout_back);
-        mPhotoView = findViewById(R.id.photoView);
+        iv_back = binding.ivBack;
+        linearLayout = binding.layoutBack;
+        mPhotoView = binding.photoView;
         mPhotoView.enable();
         Glide.with(this)
                 .load(src)
@@ -69,26 +72,22 @@ public class ImageActivity extends AppCompatActivity implements View.OnClickList
                 .thumbnail(Glide.with(this).load(R.mipmap.loading2))
                 .into(mPhotoView);
 
-        mPhotoView.setOnClickListener(this);
 //        imageSwitcher = findViewById(R.id.image_switcher);
     }
 
-    @Override
-    public void onClick(View view) {
-        switch (view.getId()) {
-            case R.id.iv_back:
-                finish();
-                break;
-            case R.id.photoView:
-                if (linearLayout.getVisibility() == View.INVISIBLE){
-                    linearLayout.setVisibility(View.VISIBLE);
-                }else {
-                    linearLayout.setVisibility(View.INVISIBLE);
-                }
-                break;
-
+    public class MyHandler{
+        public void back(View view){
+            finish();
+        }
+        public void setLayoutVisibility(View view){
+            if (linearLayout.getVisibility() == View.INVISIBLE){
+                linearLayout.setVisibility(View.VISIBLE);
+            }else {
+                linearLayout.setVisibility(View.INVISIBLE);
+            }
         }
     }
+
 
 //    private void initImageSwitcher() {
 //

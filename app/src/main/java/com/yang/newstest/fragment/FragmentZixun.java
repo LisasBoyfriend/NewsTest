@@ -65,6 +65,10 @@ public class FragmentZixun extends Fragment{
     int pageCount = 0;
     int pageNow = 0;
 
+    public FragmentZixun(){
+
+    }
+
     public FragmentZixun(List<NewsBean.DocsBean.ListBean> data, int pageCount) {
         this.mData = data;
         this.pageCount = pageCount;

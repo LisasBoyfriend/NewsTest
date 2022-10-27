@@ -2,6 +2,8 @@ package com.yang.newstest;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.databinding.DataBindingUtil;
+import androidx.databinding.ViewDataBinding;
 import androidx.fragment.app.Fragment;
 import androidx.viewpager.widget.ViewPager;
 
@@ -17,6 +19,7 @@ import android.widget.Toast;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.yang.newstest.adapter.MainFraAdapter;
 import com.yang.newstest.bean.NewsBean;
+import com.yang.newstest.databinding.ActivityMainBinding;
 import com.yang.newstest.fragment.FragmentWode;
 import com.yang.newstest.fragment.FragmentYinshipin;
 import com.yang.newstest.fragment.FragmentZhuanti;
@@ -41,6 +44,7 @@ import retrofit2.Retrofit;
 
 public class MainActivity extends AppCompatActivity {
 
+    private ActivityMainBinding dataBinding;
     private ViewPager viewPager;
     private List<Fragment> fragments;
     BottomNavigationView bottomNavigationView;
@@ -65,7 +69,8 @@ public class MainActivity extends AppCompatActivity {
         Window window = this.getWindow();
         window.getDecorView().setSystemUiVisibility(View.SYSTEM_UI_FLAG_LAYOUT_STABLE | View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN);
         window.setStatusBarColor(Color.TRANSPARENT);
-        setContentView(R.layout.activity_main);
+        dataBinding = DataBindingUtil.setContentView(this, R.layout.activity_main);
+//        setContentView(R.layout.activity_main);
         initView();
 
         initBna(bottomNavigationView);
@@ -109,8 +114,8 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public void initView() {
-        viewPager = findViewById(R.id.activity_main_viewpager);
-        bottomNavigationView = findViewById(R.id.activity_main_bna);
+        viewPager = dataBinding.activityMainViewpager;
+        bottomNavigationView = dataBinding.activityMainBna;
     }
 
     public void initFragmentData(List<Fragment> fragments) {
