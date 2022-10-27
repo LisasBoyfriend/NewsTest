@@ -309,7 +309,6 @@ public class DetailActivity extends GSYBaseActivityDetail<StandardGSYVideoPlayer
         public void onPageStarted(WebView view, String url, Bitmap favicon) {
             progressBar.setVisibility(View.VISIBLE);
 
-
             super.onPageStarted(view, url, favicon);
 
         }
@@ -330,16 +329,19 @@ public class DetailActivity extends GSYBaseActivityDetail<StandardGSYVideoPlayer
                     "\t\t \t   };\n" +
                     "\t\t }" +
                     "}");
-//            view.loadUrl("function video() {\n" +
-//                    "\t\t\t\tvar href = document.getElementById(\"videoPoster\");\n" +
-//                    "\t\t\t\tvar a = href.getElementsByTagName(\"source\");\n" +
-//                    "\t\t\t\tfor (var i = 0; i < a.length; i++) {\n" +
-//                    "\t\t\t\t\thref.parentNode.removeChild(href);\n" +
-//                    "\t\t\t\t}\n" +
-//                    "\t\t\t}");
+
             //执行js函数
             view.loadUrl("javascript:img()");
-//            view.loadUrl("javascript:video()");
+            if (videoUrl != null){
+                Log.i(TAG, "onPageFinished: 222");
+                view.loadUrl("javascript:function removeVideo(){\n" +
+                        "\t\t\t\tvar href = document.getElementById(\"videoPoster\");\n" +
+                        "\t\t\t\thref.parentNode.removeChild(href);\n" +
+                        "\t\t\t}");
+                view.loadUrl("javascript:removeVideo()");
+            }
+
+
 
             super.onPageFinished(view, url);
             progressBar.setVisibility(View.GONE);
@@ -368,12 +370,6 @@ public class DetailActivity extends GSYBaseActivityDetail<StandardGSYVideoPlayer
             Log.i(TAG, "showImage: " + src);
         }
 
-        @JavascriptInterface
-        public void showVideo(String src) {
-            Toast.makeText(getApplicationContext(), "555", Toast.LENGTH_SHORT).show();
-            Log.i(TAG, "showVideo: " + src);
-
-        }
     }
 
     /**
