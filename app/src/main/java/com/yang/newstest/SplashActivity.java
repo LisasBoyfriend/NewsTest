@@ -17,7 +17,12 @@ import android.widget.TextView;
 import com.yang.newstest.databinding.ActivitySplashBinding;
 import com.yang.newstest.utils.AppUtils;
 
+import org.reactivestreams.Subscriber;
+import org.reactivestreams.Subscription;
+
+import java.io.Serializable;
 import java.util.Observable;
+import java.util.concurrent.TimeUnit;
 
 import io.reactivex.BackpressureStrategy;
 import io.reactivex.Flowable;
@@ -25,13 +30,13 @@ import io.reactivex.FlowableEmitter;
 import io.reactivex.FlowableOnSubscribe;
 import io.reactivex.Scheduler;
 import io.reactivex.android.schedulers.AndroidSchedulers;
+import io.reactivex.functions.Action;
 import io.reactivex.functions.Consumer;
 import io.reactivex.schedulers.Schedulers;
 
-public class SplashActivity extends AppCompatActivity{
+public class SplashActivity extends AppCompatActivity {
     TextView tv_time;
     FrameLayout layout_start_skip;
-    MCountDownTimer mCountDownTimer;
     private static Boolean isExit;
     ActivitySplashBinding binding;
 
@@ -53,42 +58,23 @@ public class SplashActivity extends AppCompatActivity{
     @Override
     protected void onResume() {
         super.onResume();
-//改用RxJava设置启动页
-        Flowable<Boolean> flowable = Flowable.create(new FlowableOnSubscribe<Boolean>() {
-            @Override
-            public void subscribe(FlowableEmitter<Boolean> e) throws Exception {
-                if (AppUtils.isRunBackground(getApplicationContext())){
-                    e.onNext(true);
-                }else {
-                    mCountDownTimer = new MCountDownTimer(3000, 1000);
-                    mCountDownTimer.start();
-                    e.onNext(false);
-                }
-            }
-        }, BackpressureStrategy.ERROR);
 
-        flowable.subscribeOn(AndroidSchedulers.mainThread())
-                .observeOn(Schedulers.newThread())
-                .subscribe(new Consumer<Boolean>() {
+        Flowable.intervalRange(0, 3, 1, 1, TimeUnit.SECONDS)
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .doOnNext(new Consumer<Long>() {
                     @Override
-                    public void accept(Boolean aBoolean) throws Exception {
-                        if (!aBoolean){
-                            Thread.sleep(3000);
-                            if (!isExit){
-                                turnToMain();
-                            }
-                        }else {
-                            turnToMain();
-                        }
+                    public void accept(Long aLong) throws Exception {
+                        tv_time.setText(3-aLong+"s 跳过");
                     }
-                });
-//        if (AppUtils.isRunBackground(this)) {
-//            handler.post(mRunnable);
-//        } else {
-//            mCountDownTimer = new MCountDownTimer(3000, 1000);
-//            mCountDownTimer.start();
-//            handler.postDelayed(mRunnable, 3000);
-//        }
+                })
+                .doOnComplete(new Action() {
+                    @Override
+                    public void run() throws Exception {
+                        turnToMain();
+                    }
+                })
+                .subscribe();
 
     }
 
@@ -102,22 +88,20 @@ public class SplashActivity extends AppCompatActivity{
 
     @Override
     protected void onDestroy() {
-        if (mCountDownTimer != null) {
-            mCountDownTimer.cancel();
-        }
+
 //        if (mRunnable != null) {
 //            handler.removeCallbacks(mRunnable);
 //        }
         super.onDestroy();
     }
 
-    public class Handlers{
-        public void skip(View view){
-            turnToMain();
-            finish();
-            isExit = true;
-        }
-    }
+//    public class Handlers {
+//        public void skip(View view) {
+//            turnToMain();
+//            finish();
+//            isExit = true;
+//        }
+//    }
 
     public void onClick(View view) {
         switch (view.getId()) {
@@ -137,33 +121,10 @@ public class SplashActivity extends AppCompatActivity{
         super.onBackPressed();
     }
 
-    public void turnToMain(){
+    public void turnToMain() {
         Intent intent = new Intent(SplashActivity.this, MainActivity.class);
         startActivity(intent);
         finish();
-    }
-    class MCountDownTimer extends CountDownTimer {
-
-        public MCountDownTimer(long millisInFuture, long countDownInterval) {
-            super(millisInFuture, countDownInterval);
-        }
-
-        @Override
-        public void onTick(long l) {
-
-            if (tv_time != null) {
-                tv_time.setText("" + (l + 1000) / 1000 + getString(R.string.click_to_skip));
-            }
-
-        }
-
-        @Override
-        public void onFinish() {
-            if (tv_time != null) {
-                tv_time.setText("0" + getString(R.string.click_to_skip));
-            }
-
-        }
     }
 
 
