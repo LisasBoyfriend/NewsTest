@@ -24,26 +24,25 @@ import com.yang.newstest.utils.StringUtils;
 
 import java.util.List;
 
-public class NewsBean2ViewBinder extends ItemViewBinder<NewsBean.DocsBean.ListBean, NewsBean2ViewBinder.ViewHolder> {
-    @NonNull
+public class NewsBean2ViewBinder extends BaseViewBinder<NewsBean.DocsBean.ListBean, ItemNews2Binding>{
     @Override
-    public NewsBean2ViewBinder.ViewHolder onCreateViewHolder(@NonNull LayoutInflater layoutInflater, @NonNull ViewGroup viewGroup) {
-        ItemNews2Binding binding = DataBindingUtil.inflate(layoutInflater, R.layout.item_news_2, viewGroup, false);
-        return new NewsBean2ViewBinder.ViewHolder(binding);
+    public int setLayoutId() {
+        return R.layout.item_news_2;
     }
 
     @Override
-    public void onBindViewHolder(@NonNull NewsBean2ViewBinder.ViewHolder viewHolder, NewsBean.DocsBean.ListBean listBean) {
-        ItemNews2Binding binding = viewHolder.getBinding();
+    public void onBindViewHolder(@NonNull BaseViewHolder<ItemNews2Binding> itemNews2BindingBaseViewHolder, NewsBean.DocsBean.ListBean listBean) {
+        super.onBindViewHolder(itemNews2BindingBaseViewHolder, listBean);
+        ItemNews2Binding binding = itemNews2BindingBaseViewHolder.getBinding();
         binding.setListBean(listBean);
 
         if (listBean.getImgUrls().size() > 0) {
-            Glide.with(viewHolder.itemView)
+            Glide.with(itemNews2BindingBaseViewHolder.itemView)
                     .load(listBean.getImgUrls().get(0))
                     .placeholder(R.mipmap.loading)
-                    .into(viewHolder.binding.ivNewsImage);
+                    .into(itemNews2BindingBaseViewHolder.binding.ivNewsImage);
         }
-        viewHolder.itemView.setOnClickListener(new View.OnClickListener() {
+        itemNews2BindingBaseViewHolder.itemView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 Log.i("ViewBinding2", "onClick: ");
@@ -67,15 +66,4 @@ public class NewsBean2ViewBinder extends ItemViewBinder<NewsBean.DocsBean.ListBe
         });
     }
 
-    protected class ViewHolder extends RecyclerView.ViewHolder {
-        private ItemNews2Binding binding;
-        public ItemNews2Binding getBinding(){
-            return binding;
-        }
-        public ViewHolder(@NonNull ItemNews2Binding binding) {
-            super(binding.getRoot());
-            this.binding = binding;
-
-        }
-    }
 }

@@ -6,6 +6,7 @@ import androidx.databinding.DataBindingUtil;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
 import android.widget.ImageSwitcher;
@@ -19,6 +20,7 @@ import com.yang.newstest.databinding.ActivityImageBinding;
 import com.yang.newstest.helper.GlideHelper;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
 
 public class ImageActivity extends AppCompatActivity  {
@@ -41,12 +43,24 @@ public class ImageActivity extends AppCompatActivity  {
         binding = DataBindingUtil.setContentView(this, R.layout.activity_image);
 //        setContentView(R.layout.activity_image);
         imageSrc = getIntent().getStringArrayListExtra("image_srcs");
+        imageSrc = handlerSrc(imageSrc);
         src = getIntent().getStringExtra("image_src");
         position = getIntent().getIntExtra("position", 0);
         initView();
+        Log.i("Image", "onCreate: "+imageSrc);
+        for (int i = 0; i < imageSrc.size(); i++){
+            Log.i("Image", "onCreate: "+imageSrc.get(i));
+        }
 
 //        initImageSwitcher();
 
+    }
+
+    private ArrayList<String> handlerSrc(ArrayList<String> list) {
+        HashSet set = new HashSet(list);
+        list.clear();
+        list.addAll(set);
+        return list;
     }
 
 
@@ -75,6 +89,18 @@ public class ImageActivity extends AppCompatActivity  {
 //        imageSwitcher = findViewById(R.id.image_switcher);
     }
 
+    public void onClick(View view){
+        if (view == binding.ivBack){
+            finish();
+            return;
+        }else if (view == binding.photoView){
+            if (linearLayout.getVisibility() == View.INVISIBLE){
+                linearLayout.setVisibility(View.VISIBLE);
+            }else {
+                linearLayout.setVisibility(View.INVISIBLE);
+            }
+        }
+    }
     public class MyHandler{
         public void back(View view){
             finish();

@@ -1,19 +1,27 @@
 package com.yang.newstest.adapter;
 
+import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 
 import androidx.annotation.NonNull;
+import androidx.databinding.DataBindingUtil;
+import androidx.databinding.ViewDataBinding;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
+import com.bumptech.glide.load.resource.bitmap.RoundedCorners;
+import com.bumptech.glide.request.RequestOptions;
 import com.yang.newstest.DetailActivity;
+import com.yang.newstest.R;
 import com.yang.newstest.UniteApplication;
 import com.yang.newstest.bean.NewsBean;
+import com.yang.newstest.databinding.BannerBinding;
 import com.youth.banner.adapter.BannerAdapter;
 
 import java.util.List;
+import java.util.zip.Inflater;
 
 public class ImageBannerAdapter extends BannerAdapter<NewsBean.DocsBean.FocusesBean, ImageBannerAdapter.BannerViewHoler> {
     public ImageBannerAdapter(List<NewsBean.DocsBean.FocusesBean> datas) {
@@ -22,23 +30,20 @@ public class ImageBannerAdapter extends BannerAdapter<NewsBean.DocsBean.FocusesB
 
     @Override
     public ImageBannerAdapter.BannerViewHoler onCreateHolder(ViewGroup parent, int viewType) {
-        ImageView imageView = new ImageView(parent.getContext());
-        //注意，必须设置为match_parent，这个是viewpager2强制要求的
-        imageView.setLayoutParams(new ViewGroup.LayoutParams(
-                ViewGroup.LayoutParams.MATCH_PARENT,
-                ViewGroup.LayoutParams.MATCH_PARENT));
-        imageView.setScaleType(ImageView.ScaleType.CENTER_CROP);
-        return new BannerViewHoler(imageView);
+        LayoutInflater inflater = LayoutInflater.from(parent.getContext());
+        BannerBinding binding = DataBindingUtil.inflate(inflater, R.layout.banner, parent, false);
+        return new BannerViewHoler(binding);
     }
 
     @Override
     public void onBindView(ImageBannerAdapter.BannerViewHoler holder, NewsBean.DocsBean.FocusesBean data, int position, int size) {
 
-        Glide.with(holder.imageView)
+        Glide.with(holder.getBinding().getRoot())
                 .load(data.getFocusImageUrl())
-                .into(holder.imageView);
+                .into(holder.getBinding().ivBanner);
 
-        holder.imageView.setOnClickListener(new View.OnClickListener() {
+        holder.getBinding().tvTitle.setText(data.getFocusImageTitle());
+        holder.getBinding().ivBanner.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 String url = data.getLinkUrl();
@@ -48,10 +53,15 @@ public class ImageBannerAdapter extends BannerAdapter<NewsBean.DocsBean.FocusesB
     }
 
     protected class BannerViewHoler extends RecyclerView.ViewHolder {
-        ImageView imageView;
-        public BannerViewHoler(@NonNull View itemView) {
-            super(itemView);
-            this.imageView = (ImageView) itemView;
+        BannerBinding binding;
+
+        public BannerBinding getBinding() {
+            return binding;
+        }
+
+        public BannerViewHoler(@NonNull BannerBinding binding) {
+            super(binding.getRoot());
+            this.binding = binding;
         }
     }
 }

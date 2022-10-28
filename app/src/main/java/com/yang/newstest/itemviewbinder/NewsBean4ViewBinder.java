@@ -21,39 +21,26 @@ import com.yang.newstest.bean.NewsBean;
 import com.yang.newstest.databinding.ItemNews4Binding;
 import com.yang.newstest.utils.StringUtils;
 
-public class NewsBean4ViewBinder extends ItemViewBinder<NewsBean.DocsBean.ListBean, NewsBean4ViewBinder.ViewHolder> {
-    @NonNull
+public class NewsBean4ViewBinder extends BaseViewBinder<NewsBean.DocsBean.ListBean, ItemNews4Binding> {
     @Override
-    public NewsBean4ViewBinder.ViewHolder onCreateViewHolder(@NonNull LayoutInflater layoutInflater, @NonNull ViewGroup viewGroup) {
-        ItemNews4Binding binding = DataBindingUtil.inflate(layoutInflater, R.layout.item_news_4, viewGroup, false);
-        return new NewsBean4ViewBinder.ViewHolder(binding);
+    public int setLayoutId() {
+        return R.layout.item_news_4;
     }
 
     @Override
-    public void onBindViewHolder(@NonNull NewsBean4ViewBinder.ViewHolder viewHolder, NewsBean.DocsBean.ListBean listBean) {
-        ItemNews4Binding binding = viewHolder.getBinding();
+    public void onBindViewHolder(@NonNull BaseViewHolder<ItemNews4Binding> itemNews4BindingBaseViewHolder, NewsBean.DocsBean.ListBean listBean) {
+        super.onBindViewHolder(itemNews4BindingBaseViewHolder, listBean);
+        ItemNews4Binding binding = itemNews4BindingBaseViewHolder.getBinding();
         binding.setListBean(listBean);
         if (listBean.getImgUrls().get(0) != null){
-            Glide.with(viewHolder.itemView).load(listBean.getImgUrls().get(0)).into(binding.ivNewsImage);
+            Glide.with(itemNews4BindingBaseViewHolder.itemView).load(listBean.getImgUrls().get(0)).into(binding.ivNewsImage);
         }
-        viewHolder.itemView.setOnClickListener(new View.OnClickListener() {
+        itemNews4BindingBaseViewHolder.itemView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 Log.i("ViewBinding4", "onClick: ");
                 String url = listBean.getLinkUrl();
                 DetailActivity.start(UniteApplication.getContext(), url);           }
         });
-    }
-
-    protected class ViewHolder extends RecyclerView.ViewHolder {
-        ItemNews4Binding binding;
-        public ItemNews4Binding getBinding(){
-            return binding;
-        }
-
-        public ViewHolder(@NonNull ItemNews4Binding binding) {
-            super(binding.getRoot());
-            this.binding = binding;
-        }
     }
 }

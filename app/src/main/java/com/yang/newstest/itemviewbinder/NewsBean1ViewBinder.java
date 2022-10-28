@@ -22,37 +22,23 @@ import com.yang.newstest.bean.NewsBean;
 import com.yang.newstest.databinding.ItemNews1Binding;
 import com.yang.newstest.utils.StringUtils;
 
-public class NewsBean1ViewBinder extends ItemViewBinder<NewsBean.DocsBean.ListBean, NewsBean1ViewBinder.ViewHolder> {
-    @NonNull
+public class NewsBean1ViewBinder extends BaseViewBinder<NewsBean.DocsBean.ListBean, ItemNews1Binding>{
     @Override
-    public NewsBean1ViewBinder.ViewHolder onCreateViewHolder(@NonNull LayoutInflater layoutInflater, @NonNull ViewGroup viewGroup) {
-        ItemNews1Binding binding = DataBindingUtil.inflate(layoutInflater, R.layout.item_news_1, viewGroup, false);
-        return new ViewHolder(binding);
+    public int setLayoutId() {
+        return R.layout.item_news_1;
     }
 
     @Override
-    public void onBindViewHolder(@NonNull NewsBean1ViewBinder.ViewHolder viewHolder, NewsBean.DocsBean.ListBean listBean) {
-
-        ItemNews1Binding binding = viewHolder.getBinding();
+    public void onBindViewHolder(@NonNull BaseViewHolder<ItemNews1Binding> itemNews1BindingBaseViewHolder, NewsBean.DocsBean.ListBean listBean) {
+        super.onBindViewHolder(itemNews1BindingBaseViewHolder, listBean);
+        ItemNews1Binding binding = itemNews1BindingBaseViewHolder.getBinding();
         binding.setListBean(listBean);
-        viewHolder.itemView.setOnClickListener(new View.OnClickListener() {
+        itemNews1BindingBaseViewHolder.itemView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 String url = listBean.getLinkUrl();
                 DetailActivity.start(UniteApplication.getContext(), url);
             }
         });
-    }
-
-    public class ViewHolder extends RecyclerView.ViewHolder {
-        ItemNews1Binding binding;
-        public ItemNews1Binding getBinding(){
-            return binding;
-        }
-
-        public ViewHolder(@NonNull ItemNews1Binding binding) {
-            super(binding.getRoot());
-            this.binding = binding;
-        }
     }
 }

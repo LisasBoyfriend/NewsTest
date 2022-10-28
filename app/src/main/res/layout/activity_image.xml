@@ -7,9 +7,6 @@
         <variable
             name="handler"
             type="com.yang.newstest.ImageActivity.MyHandler" />
-        <variable
-            name="imageData"
-            type="com.yang.newstest.viewmodel.ImageActivityModel" />
 
     </data>
 
@@ -34,7 +31,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="10dp"
                 android:clickable="true"
-                android:onClick="@{handler::back}"
+                android:onClick="onClick"
                 android:src="@drawable/ic__back_24_white"
                 android:layout_gravity="center" />
         </LinearLayout>
@@ -47,7 +44,7 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:clickable="true"
-            android:onClick="@{handler::setLayoutVisibility}"/>
+            android:onClick="onClick"/>
         <!--    <ImageSwitcher-->
         <!--        android:id="@+id/image_switcher"-->
         <!--        android:layout_width="match_parent"-->

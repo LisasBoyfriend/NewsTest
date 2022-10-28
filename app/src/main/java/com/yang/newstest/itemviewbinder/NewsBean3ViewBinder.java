@@ -21,43 +21,29 @@ import com.yang.newstest.bean.NewsBean;
 import com.yang.newstest.databinding.ItemNews3Binding;
 import com.yang.newstest.utils.StringUtils;
 
-public class NewsBean3ViewBinder extends ItemViewBinder<NewsBean.DocsBean.ListBean, NewsBean3ViewBinder.ViewHolder> {
-    @NonNull
+public class NewsBean3ViewBinder extends BaseViewBinder<NewsBean.DocsBean.ListBean, ItemNews3Binding> {
     @Override
-    public NewsBean3ViewBinder.ViewHolder onCreateViewHolder(@NonNull LayoutInflater layoutInflater, @NonNull ViewGroup viewGroup) {
-        ItemNews3Binding binding = DataBindingUtil.inflate(layoutInflater, R.layout.item_news_3, viewGroup, false);
-        return new NewsBean3ViewBinder.ViewHolder(binding);
+    public int setLayoutId() {
+        return R.layout.item_news_3;
     }
 
     @Override
-    public void onBindViewHolder(@NonNull NewsBean3ViewBinder.ViewHolder viewHolder, NewsBean.DocsBean.ListBean listBean) {
-        ItemNews3Binding binding = viewHolder.getBinding();
+    public void onBindViewHolder(@NonNull BaseViewHolder<ItemNews3Binding> itemNews3BindingBaseViewHolder, NewsBean.DocsBean.ListBean listBean) {
+        super.onBindViewHolder(itemNews3BindingBaseViewHolder, listBean);
+        ItemNews3Binding binding = itemNews3BindingBaseViewHolder.getBinding();
         binding.setListBean(listBean);
         if (listBean.getImgUrls().get(0) != null){
-            Glide.with(viewHolder.itemView).load(listBean.getImgUrls().get(0)).into(binding.ivNewsImage1);
-            Glide.with(viewHolder.itemView).load(listBean.getImgUrls().get(1)).into(binding.ivNewsImage2);
-            Glide.with(viewHolder.itemView).load(listBean.getImgUrls().get(2)).into(binding.ivNewsImage3);
+            Glide.with(itemNews3BindingBaseViewHolder.itemView).load(listBean.getImgUrls().get(0)).into(binding.ivNewsImage1);
+            Glide.with(itemNews3BindingBaseViewHolder.itemView).load(listBean.getImgUrls().get(1)).into(binding.ivNewsImage2);
+            Glide.with(itemNews3BindingBaseViewHolder.itemView).load(listBean.getImgUrls().get(2)).into(binding.ivNewsImage3);
 
         }
-        viewHolder.itemView.setOnClickListener(new View.OnClickListener() {
+        itemNews3BindingBaseViewHolder.itemView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 Log.i("ViewBinding3", "onClick: ");
                 String url = listBean.getLinkUrl();
                 DetailActivity.start(UniteApplication.getContext(), url);            }
         });
-    }
-
-    protected class ViewHolder extends RecyclerView.ViewHolder {
-        ItemNews3Binding binding;
-        public ItemNews3Binding getBinding(){
-            return binding;
-        }
-        public ViewHolder(@NonNull ItemNews3Binding binding) {
-            super(binding.getRoot());
-            this.binding = binding;
-
-
-        }
     }
 }
