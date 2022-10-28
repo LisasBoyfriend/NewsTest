@@ -43,18 +43,11 @@ public class SplashActivity extends AppCompatActivity {
     ActivitySplashBinding binding;
     Disposable mDisposable;
 
-//    Handler handler = new Handler();
-//    Runnable mRunnable;
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         binding = DataBindingUtil.setContentView(this, R.layout.activity_splash);
-
         initView();
-
-//        mRunnable = new MyRunnable();
-
 
     }
 
@@ -100,19 +93,10 @@ public class SplashActivity extends AppCompatActivity {
     @Override
     protected void onDestroy() {
 
-//        if (mRunnable != null) {
-//            handler.removeCallbacks(mRunnable);
-//        }
         super.onDestroy();
     }
 
-//    public class Handlers {
-//        public void skip(View view) {
-//            turnToMain();
-//            finish();
-//            isExit = true;
-//        }
-//    }
+
 
     public void onClick(View view) {
         switch (view.getId()) {
@@ -141,16 +125,5 @@ public class SplashActivity extends AppCompatActivity {
         }
         finish();
     }
-
-
-//    class MyRunnable implements Runnable {
-//
-//        @Override
-//        public void run() {
-//            Intent intent = new Intent(SplashActivity.this, MainActivity.class);
-//            startActivity(intent);
-//            finish();
-//        }
-//    }
 
 }

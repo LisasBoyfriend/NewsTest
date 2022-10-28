@@ -31,8 +31,7 @@ public class ImageActivity extends AppCompatActivity  {
     private String src;
     private int position;
     private int index = 0;
-    private float touchDown;
-    private float touchUp;
+
 
     private PhotoView mPhotoView;
     private ImageView iv_back;
@@ -41,7 +40,6 @@ public class ImageActivity extends AppCompatActivity  {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         binding = DataBindingUtil.setContentView(this, R.layout.activity_image);
-//        setContentView(R.layout.activity_image);
         imageSrc = getIntent().getStringArrayListExtra("image_srcs");
         imageSrc = handlerSrc(imageSrc);
         src = getIntent().getStringExtra("image_src");
@@ -52,7 +50,6 @@ public class ImageActivity extends AppCompatActivity  {
             Log.i("Image", "onCreate: "+imageSrc.get(i));
         }
 
-//        initImageSwitcher();
 
     }
 
@@ -86,7 +83,6 @@ public class ImageActivity extends AppCompatActivity  {
                 .thumbnail(Glide.with(this).load(R.mipmap.loading2))
                 .into(mPhotoView);
 
-//        imageSwitcher = findViewById(R.id.image_switcher);
     }
 
     public void onClick(View view){
@@ -115,41 +111,4 @@ public class ImageActivity extends AppCompatActivity  {
     }
 
 
-//    private void initImageSwitcher() {
-//
-//        imageSwitcher.setFactory(new ViewSwitcher.ViewFactory() {
-//            @Override
-//            public View makeView() {
-//                PhotoView photoView = new PhotoView(ImageActivity.this);
-//
-//                Glide.with(ImageActivity.this)
-//                        .load(src)
-//                        .into(photoView);
-//                return photoView;
-//            }
-//        });
-//        imageSwitcher.setOnTouchListener(new View.OnTouchListener() {
-//            @Override
-//            public boolean onTouch(View view, MotionEvent motionEvent) {
-//                if (motionEvent.getAction() == MotionEvent.ACTION_DOWN){
-//                    touchDown = motionEvent.getX();
-//                    return true;
-//                }else if (motionEvent.getAction() == MotionEvent.ACTION_UP){
-//                    touchUp = motionEvent.getAction();
-//                    if (touchUp - touchDown > 100){
-//                        index = index==0?imageSrc.size()-1:index-1;
-//                        Glide.with(view)
-//                                .load(imageSrc.get(index))
-//                                .into((PhotoView)imageSwitcher.getCurrentView());
-//                    }else if (touchDown - touchUp > 100){
-//                        index = index==imageSrc.size() -1?0:index+1;
-//                        Glide.with(view)
-//                                .load(imageSrc.get(index))
-//                                .into((PhotoView)imageSwitcher.getCurrentView());
-//                    }
-//                }
-//                return false;
-//            }
-//        });
-//    }
 }

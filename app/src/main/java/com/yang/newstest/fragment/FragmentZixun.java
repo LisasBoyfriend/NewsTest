@@ -120,15 +120,20 @@ public class FragmentZixun extends Fragment{
                 , new NewsBean3ViewBinder(), new NewsBean4ViewBinder()).withLinker(new Linker<NewsBean.DocsBean.ListBean>() {
             @Override
             public int index(int i, NewsBean.DocsBean.ListBean listBean) {
-                if (listBean.getListStyle().equals("1")){
-                    return 0;
-                }else if (listBean.getListStyle().equals("2")){
-                    return 1;
-                }else if (listBean.getListStyle().equals("3")){
-                    return 2;
-                }else {
-                    return 3;
+                String style = listBean.getListStyle();
+                if (style != null){
+                    if (style.equals("1")){
+                        return 0;
+                    }else if (style.equals("2")){
+                        return 1;
+                    }else if (style.equals("3")){
+                        return 2;
+                    }else {
+                        return 3;
+                    }
                 }
+                return 0;
+
             }
         });
         adapter.register(NewsBean.DocsBean.class, new HeaderViewBinder(this));
@@ -207,22 +212,7 @@ public class FragmentZixun extends Fragment{
             }
         });
 
-        //单Retrofit框架
-//        Call<NewsBean> call = getHttpCall(URLUtils.BASE_URL,"");
-//        call.enqueue(new Callback<NewsBean>() {
-//            @Override
-//            public void onResponse(Call<NewsBean> call, Response<NewsBean> response) {
-//                List<NewsBean.DocsBean.ListBean> list = response.body().getDocs().getList();
-//                mData.clear();
-//                mData.addAll(list);
-//                adapter.notifyDataSetChanged();
-//            }
-//
-//            @Override
-//            public void onFailure(Call<NewsBean> call, Throwable t) {
-//                Toast.makeText(getContext(), "请检查网络设置", Toast.LENGTH_SHORT).show();
-//            }
-//        });
+
     }
 
     private void requestLoadMore(){
@@ -246,43 +236,9 @@ public class FragmentZixun extends Fragment{
                     Toast.makeText(getContext(), "请检查网络设置", Toast.LENGTH_SHORT).show();
                 }            }
         });
-//        Call<NewsBean> call = getHttpCall(URLUtils.BASE_URL, pageStr);
-//        call.enqueue(new Callback<NewsBean>() {
-//            @Override
-//            public void onResponse(Call<NewsBean> call, Response<NewsBean> response) {
-//                List<NewsBean.DocsBean.ListBean> list = response.body().getDocs().getList();
-//                mData.addAll(list);
-//                adapter.notifyItemRangeChanged(mData.size()-list.size(), list.size());
-//            }
-//
-//            @Override
-//            public void onFailure(Call<NewsBean> call, Throwable t) {
-//                if (pageNow == 0){
-//                    Toast.makeText(getContext(), "已经到底啦", Toast.LENGTH_SHORT).show();
-//                }else {
-//                    Toast.makeText(getContext(), "请检查网络设置", Toast.LENGTH_SHORT).show();
-//                }
-//            }
-//        });
+
     }
 
-    //retrofit处理网络数据
-//    public Call<NewsBean> getHttpCall(String baseUrl, String url){
-//        //获取OKHttp拦截器对象
-//        OkHttpClient client = new InterceptorOKHttpClient().getClient();
-//        //创建Retrofit对象
-//        Retrofit retrofit = new Retrofit.Builder()
-//                .client(client)
-//                .baseUrl(baseUrl)
-//                .addConverterFactory(GsonConverterFactory.create())
-//                .build();
-//
-//        //创建网络请求接口实例
-//        GetZixunRequest request = retrofit.create(GetZixunRequest.class);
-//        //封装发送请求
-//        Call<NewsBean> call = request.yourGet(URLUtils.PATH_FOR_ZIXUN + url);
-//        return call;
-//
-//    }
+
 
 }

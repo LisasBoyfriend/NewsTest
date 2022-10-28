@@ -32,7 +32,6 @@ public class StringUtils {
         String[] s = pubTime.split(" ");
         String[] date = s[0].split("-");//把年月日进行了分割，只需要月日
         String[] time = s[1].split(":");//把时分秒进行了分割，只需要时分
-        Log.i("News", "resetTimeArray: "+s[0]);
         if (date[1].startsWith("0")){
             date[1] = date[1].substring(0);
         }
