@@ -14,6 +14,7 @@ import android.view.WindowManager;
 import android.widget.FrameLayout;
 import android.widget.TextView;
 
+import com.google.common.eventbus.Subscribe;
 import com.yang.newstest.databinding.ActivitySplashBinding;
 import com.yang.newstest.utils.AppUtils;
 
@@ -21,15 +22,17 @@ import org.reactivestreams.Subscriber;
 import org.reactivestreams.Subscription;
 
 import java.io.Serializable;
-import java.util.Observable;
 import java.util.concurrent.TimeUnit;
 
 import io.reactivex.BackpressureStrategy;
 import io.reactivex.Flowable;
 import io.reactivex.FlowableEmitter;
 import io.reactivex.FlowableOnSubscribe;
+import io.reactivex.Observable;
+import io.reactivex.Observer;
 import io.reactivex.Scheduler;
 import io.reactivex.android.schedulers.AndroidSchedulers;
+import io.reactivex.disposables.Disposable;
 import io.reactivex.functions.Action;
 import io.reactivex.functions.Consumer;
 import io.reactivex.schedulers.Schedulers;
@@ -37,8 +40,8 @@ import io.reactivex.schedulers.Schedulers;
 public class SplashActivity extends AppCompatActivity {
     TextView tv_time;
     FrameLayout layout_start_skip;
-    private static Boolean isExit;
     ActivitySplashBinding binding;
+    Disposable mDisposable;
 
 //    Handler handler = new Handler();
 //    Runnable mRunnable;
@@ -59,22 +62,31 @@ public class SplashActivity extends AppCompatActivity {
     protected void onResume() {
         super.onResume();
 
-        Flowable.intervalRange(0, 3, 1, 1, TimeUnit.SECONDS)
+        Observable.intervalRange(0, 3, 1, 1, TimeUnit.SECONDS)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
-                .doOnNext(new Consumer<Long>() {
+                .subscribe(new Observer<Long>() {
                     @Override
-                    public void accept(Long aLong) throws Exception {
-                        tv_time.setText(3-aLong+"s 跳过");
+                    public void onSubscribe(Disposable d) {
+
+                        mDisposable = d;
                     }
-                })
-                .doOnComplete(new Action() {
+
                     @Override
-                    public void run() throws Exception {
+                    public void onNext(Long value) {
+                        tv_time.setText(3 - value + "s 跳过");
+                    }
+
+                    @Override
+                    public void onError(Throwable e) {
+
+                    }
+
+                    @Override
+                    public void onComplete() {
                         turnToMain();
                     }
-                })
-                .subscribe();
+                });
 
     }
 
@@ -83,7 +95,6 @@ public class SplashActivity extends AppCompatActivity {
 
         layout_start_skip = binding.layoutStartSkip;
         tv_time.setText("3" + getString(R.string.click_to_skip));
-        isExit = false;
     }
 
     @Override
@@ -109,21 +120,25 @@ public class SplashActivity extends AppCompatActivity {
                 Log.i("Main", "onClick: ");
                 turnToMain();
                 finish();
-                isExit = true;
-//                handler.post(mRunnable);
+                //                handler.post(mRunnable);
                 break;
         }
     }
 
     @Override
     public void onBackPressed() {
-        isExit = true;
+        if (!mDisposable.isDisposed()) {
+            mDisposable.dispose();
+        }
         super.onBackPressed();
     }
 
     public void turnToMain() {
         Intent intent = new Intent(SplashActivity.this, MainActivity.class);
         startActivity(intent);
+        if (!mDisposable.isDisposed()) {
+            mDisposable.dispose();
+        }
         finish();
     }
 
