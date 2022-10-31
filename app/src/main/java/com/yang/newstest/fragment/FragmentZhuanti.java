@@ -8,6 +8,7 @@ import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.databinding.DataBindingUtil;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.DividerItemDecoration;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -25,6 +26,7 @@ import com.shuyu.gsyvideoplayer.GSYVideoManager;
 import com.yang.newstest.MainActivity;
 import com.yang.newstest.R;
 import com.yang.newstest.bean.NewsBean;
+import com.yang.newstest.databinding.FragmentZhuantiBinding;
 import com.yang.newstest.helper.RetrofitHelper;
 import com.yang.newstest.itemviewbinder.HeaderViewBinder;
 import com.yang.newstest.itemviewbinder.NewsBean1ViewBinder;
@@ -43,15 +45,14 @@ import retrofit2.Retrofit;
 
 public class FragmentZhuanti extends Fragment {
     private static final String TAG = "FragmentZhuanTi";
-    private RecyclerView recyclerView;
     private MultiTypeAdapter adapter;
-    private SmartRefreshLayout mSmartRefreshLayout;
     RetrofitHelper mHelper;
     Retrofit mRetrofit;
 
     List<NewsBean.DocsBean.ListBean> mData = new ArrayList<>();
     //    NewsBean.DocsBean docsBean;
     List<Object> data = new ArrayList<>();
+    FragmentZhuantiBinding binding;
 
     int pageCount = 0;
     int pageNow = 0;
@@ -69,25 +70,25 @@ public class FragmentZhuanti extends Fragment {
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.fragment_zhuanti, container, false);
-        initView(view);
+        binding = DataBindingUtil.inflate(inflater, R.layout.fragment_zhuanti, container, false);
+
+        initView();
         mHelper = new RetrofitHelper();
 
-        recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
+        binding.rvFraZhuanti.setLayoutManager(new LinearLayoutManager(getContext()));
         //添加Android自带的分割线
         adapter = new MultiTypeAdapter();
         initAdapter(adapter);
-        recyclerView.setAdapter(adapter);
+        binding.rvFraZhuanti.setAdapter(adapter);
         data.addAll(mData);
         adapter.setItems(data);
         adapter.notifyDataSetChanged();
-        initSfl(mSmartRefreshLayout);
-        return view;
+        initSfl(binding.sml);
+        return binding.getRoot();
     }
 
-    public void initView(View view) {
-        recyclerView = view.findViewById(R.id.rv_fra_zhuanti);
-        recyclerView.setOnScrollListener(new RecyclerView.OnScrollListener() {
+    public void initView() {
+        binding.rvFraZhuanti.setOnScrollListener(new RecyclerView.OnScrollListener() {
             @Override
             public void onScrollStateChanged(@NonNull RecyclerView recyclerView, int newState) {
                 super.onScrollStateChanged(recyclerView, newState);
@@ -113,27 +114,10 @@ public class FragmentZhuanti extends Fragment {
                 }
             }
         });
-        mSmartRefreshLayout = view.findViewById(R.id.sml);
     }
 
 
     public void initAdapter(MultiTypeAdapter adapter) {
-//        adapter.register(NewsBean.DocsBean.ListBean.class).to(new NewsBean1ViewBinder(), new NewsBean2ViewBinder()
-//                , new NewsBean3ViewBinder(), new NewsBean4ViewBinder()).withLinker(new Linker<NewsBean.DocsBean.ListBean>() {
-//            @Override
-//            public int index(int i, NewsBean.DocsBean.ListBean listBean) {
-//                if (listBean.getListStyle().equals("1")){
-//                    return 0;
-//                }else if (listBean.getListStyle().equals("2")){
-//                    return 1;
-//                }else if (listBean.getListStyle().equals("3")){
-//                    return 2;
-//                }else {
-//                    return 3;
-//                }
-//            }
-//        });
-//        adapter.register(NewsBean.DocsBean.class, new HeaderViewBinder(this));
         adapter.register(NewsBean.DocsBean.ListBean.class, new VideoViewBinder());
     }
 

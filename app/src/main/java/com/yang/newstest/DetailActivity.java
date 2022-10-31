@@ -49,20 +49,12 @@ import java.util.Arrays;
 public class DetailActivity extends GSYBaseActivityDetail<StandardGSYVideoPlayer> {
 
     private static String TAG = "DetailActivity";
-    private ImageView iv_back, iv_hearing, iv_more;
-    private WebView wb_news;
-    private FrameLayout mLayout;
-    private LinearLayout layout_video;
-    private StandardGSYVideoPlayer gsy_player;
     private View mCustomView;
     private WebChromeClient.CustomViewCallback mCustomViewCallback;
-    private ProgressBar progressBar;
     private String url, videoUrl, imageUrl, docuTitle;
     private SharedPreferences preferences;
-    private Boolean isPlay, isPause;
     ActivityDetailBinding binding;
 
-    private OrientationUtils orientationUtils;
     private int webViewSize = 0;
 
     public static void start(Context context) {
@@ -118,29 +110,20 @@ public class DetailActivity extends GSYBaseActivityDetail<StandardGSYVideoPlayer
     }
 
     private void initView() {
-        iv_back = binding.ivBack;
-        iv_hearing = binding.ivHearing;
-        progressBar = binding.progress;
-        iv_more = binding.ivMore;
-        wb_news = binding.wbNews;
-        mLayout = binding.flVideo;
-        layout_video = binding.layoutVideo;
-        gsy_player = binding.gsyPlayer;
+
         //增加title
-        gsy_player.getTitleTextView().setVisibility(View.GONE);
-        gsy_player.getBackButton().setVisibility(View.GONE);
+        binding.gsyPlayer.getTitleTextView().setVisibility(View.GONE);
+        binding.gsyPlayer.getBackButton().setVisibility(View.GONE);
 
         initVideoBuilderMode();
         if (videoUrl != null){
-            layout_video.setVisibility(View.VISIBLE);
-            gsy_player.setVisibility(View.VISIBLE);
+            binding.layoutVideo.setVisibility(View.VISIBLE);
+            binding.gsyPlayer.setVisibility(View.VISIBLE);
         }
 
+        initWebView(binding.wbNews);
 
-
-        initWebView(wb_news);
-
-        wb_news.loadUrl(url);
+        binding.wbNews.loadUrl(url);
     }
 
 
@@ -149,12 +132,12 @@ public class DetailActivity extends GSYBaseActivityDetail<StandardGSYVideoPlayer
         mWebView.setWebChromeClient(new WebChromeClient() {
             @Override
             public void onProgressChanged(WebView view, int newProgress) {
-                progressBar.setProgress(newProgress);
+                binding.progress.setProgress(newProgress);
                 if (newProgress >= 90) {
-                    progressBar.setProgress(90);
+                    binding.progress.setProgress(90);
                 }
                 if (newProgress == 100) {
-                    progressBar.setProgress(95);
+                    binding.progress.setProgress(95);
                 }
                 super.onProgressChanged(view, newProgress);
             }
@@ -169,10 +152,10 @@ public class DetailActivity extends GSYBaseActivityDetail<StandardGSYVideoPlayer
                 mCustomView = view;
                 mCustomView.setVisibility(View.VISIBLE);
                 mCustomViewCallback = callback;
-                mLayout.addView(mCustomView);
-                mLayout.setVisibility(View.VISIBLE);
-                mLayout.bringToFront();
-                layout_video.setVisibility(View.GONE);
+                binding.flVideo.addView(mCustomView);
+                binding.flVideo.setVisibility(View.VISIBLE);
+                binding.flVideo.bringToFront();
+                binding.layoutVideo.setVisibility(View.GONE);
 
                 setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE);
             }
@@ -184,15 +167,15 @@ public class DetailActivity extends GSYBaseActivityDetail<StandardGSYVideoPlayer
                     return;
                 }
                 mCustomView.setVisibility(View.GONE);
-                mLayout.removeView(mCustomView);
+                binding.flVideo.removeView(mCustomView);
                 mCustomView = null;
-                mLayout.setVisibility(View.GONE);
+                binding.flVideo.setVisibility(View.GONE);
                 try {
                     mCustomViewCallback.onCustomViewHidden();
                 } catch (Exception e) {
 
                 }
-                layout_video.setVisibility(View.VISIBLE);
+                binding.layoutVideo.setVisibility(View.VISIBLE);
                 setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
 
             }
@@ -255,19 +238,19 @@ public class DetailActivity extends GSYBaseActivityDetail<StandardGSYVideoPlayer
             public void onCheckedChanged(RadioGroup radioGroup, int i) {
                 switch (i) {
                     case R.id.rb_dialog_small:
-                        wb_news.getSettings().setTextZoom(80);
+                        binding.wbNews.getSettings().setTextZoom(80);
                         SharePreUtils.putIntInfoToSP(SharePreUtils.WEBVIEW_SIZE, 80, preferences);
                         break;
                     case R.id.rb_dialog_medium:
-                        wb_news.getSettings().setTextZoom(100);
+                        binding.wbNews.getSettings().setTextZoom(100);
                         SharePreUtils.putIntInfoToSP(SharePreUtils.WEBVIEW_SIZE, 100, preferences);
                         break;
                     case R.id.rb_dialog_big:
-                        wb_news.getSettings().setTextZoom(120);
+                        binding.wbNews.getSettings().setTextZoom(120);
                         SharePreUtils.putIntInfoToSP(SharePreUtils.WEBVIEW_SIZE, 120, preferences);
                         break;
                     case R.id.rb_dialog_large:
-                        wb_news.getSettings().setTextZoom(140);
+                        binding.wbNews.getSettings().setTextZoom(140);
                         SharePreUtils.putIntInfoToSP(SharePreUtils.WEBVIEW_SIZE, 140, preferences);
                         break;
                 }
@@ -284,30 +267,30 @@ public class DetailActivity extends GSYBaseActivityDetail<StandardGSYVideoPlayer
 
     @Override
     protected void onPause() {
-        wb_news.onPause();
+        binding.wbNews.onPause();
         super.onPause();
     }
 
     @Override
     protected void onResume() {
-        wb_news.onResume();
+        binding.wbNews.onResume();
         super.onResume();
     }
 
     @Override
     protected void onDestroy() {
-        wb_news.setWebChromeClient(null);
-        wb_news.setWebViewClient(null);
-        wb_news.getSettings().setJavaScriptEnabled(false);
-        wb_news.clearCache(true);
-        wb_news.destroy();
+        binding.wbNews.setWebChromeClient(null);
+        binding.wbNews.setWebViewClient(null);
+        binding.wbNews.getSettings().setJavaScriptEnabled(false);
+        binding.wbNews.clearCache(true);
+        binding.wbNews.destroy();
         super.onDestroy();
     }
 
     class MyWebClient extends WebViewClient {
         @Override
         public void onPageStarted(WebView view, String url, Bitmap favicon) {
-            progressBar.setVisibility(View.VISIBLE);
+            binding.progress.setVisibility(View.VISIBLE);
 
             super.onPageStarted(view, url, favicon);
 
@@ -344,7 +327,7 @@ public class DetailActivity extends GSYBaseActivityDetail<StandardGSYVideoPlayer
 
 
             super.onPageFinished(view, url);
-            progressBar.setVisibility(View.GONE);
+            binding.progress.setVisibility(View.GONE);
 
 
         }
@@ -392,7 +375,7 @@ public class DetailActivity extends GSYBaseActivityDetail<StandardGSYVideoPlayer
 
     @Override
     public StandardGSYVideoPlayer getGSYVideoPlayer() {
-        return gsy_player;
+        return binding.gsyPlayer;
     }
 
     @Override
@@ -402,7 +385,7 @@ public class DetailActivity extends GSYBaseActivityDetail<StandardGSYVideoPlayer
         return new GSYVideoOptionBuilder()
                 .setThumbImageView(imageView)
                 .setUrl(videoUrl)
-                .setCacheWithPlay(true)
+                .setCacheWithPlay (true)
                 .setVideoTitle(docuTitle)
                 .setIsTouchWiget(true)
                 //.setAutoFullWithSize(true)

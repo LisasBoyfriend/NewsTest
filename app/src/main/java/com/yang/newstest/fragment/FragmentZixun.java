@@ -9,6 +9,7 @@ import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.databinding.DataBindingUtil;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.DividerItemDecoration;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -25,6 +26,7 @@ import com.scwang.smart.refresh.layout.listener.OnRefreshListener;
 import com.yang.newstest.R;
 import com.yang.newstest.adapter.ImageBannerAdapter;
 import com.yang.newstest.bean.NewsBean;
+import com.yang.newstest.databinding.FragmentZixunBinding;
 import com.yang.newstest.helper.InterceptorOKHttpClient;
 import com.yang.newstest.helper.RetrofitHelper;
 import com.yang.newstest.helper.requestImpl.GetZixunRequest;
@@ -51,12 +53,10 @@ import retrofit2.converter.gson.GsonConverterFactory;
 public class FragmentZixun extends Fragment{
 
     private static final String TAG = "FragmentZixun";
-    private RecyclerView recyclerView;
     private MultiTypeAdapter adapter;
-    private SmartRefreshLayout mSmartRefreshLayout;
-    private Banner banner;
     RetrofitHelper mHelper;
     Retrofit mRetrofit;
+    FragmentZixunBinding binding;
 
     List<NewsBean.DocsBean.ListBean> mData = new ArrayList<>();
     NewsBean.DocsBean docsBean;
@@ -78,42 +78,27 @@ public class FragmentZixun extends Fragment{
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.fragment_zixun, container, false);
-        initView(view);
+        binding = DataBindingUtil.inflate(inflater, R.layout.fragment_zixun, container, false);
+
         mHelper = new RetrofitHelper();
 
-        recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
+        binding.rvFraZixun.setLayoutManager(new LinearLayoutManager(getContext()));
         //添加Android自带的分割线
-        recyclerView.addItemDecoration(new DividerItemDecoration(getContext(),DividerItemDecoration.VERTICAL));
+        binding.rvFraZixun.addItemDecoration(new DividerItemDecoration(getContext(),DividerItemDecoration.VERTICAL));
         adapter = new MultiTypeAdapter();
         initAdapter(adapter);
-        recyclerView.setAdapter(adapter);
+        binding.rvFraZixun.setAdapter(adapter);
         data.addAll(mData);
         adapter.setItems(data);
         adapter.notifyDataSetChanged();
-        initSfl(mSmartRefreshLayout);
+        initSfl(binding.sml);
         requestBannerData();
 
 
-        return view;
+        return binding.getRoot();
     }
 
-    private void bindBanner() {
 
-        if (recyclerView != null){
-            if (recyclerView.getChildAt(0) != null){
-                View child = recyclerView.getChildAt(0);
-                RecyclerView.ViewHolder viewHolder = recyclerView.getChildViewHolder(child);
-                banner = viewHolder.itemView.findViewById(R.id.banner);
-                Log.i(TAG, "bindBanner: 1"+recyclerView.getChildAt(0));
-            }
-        }
-    }
-
-    public void initView(View view){
-        recyclerView = view.findViewById(R.id.rv_fra_zixun);
-        mSmartRefreshLayout = view.findViewById(R.id.sml);
-    }
 
     public void initAdapter(MultiTypeAdapter adapter){
         adapter.register(NewsBean.DocsBean.ListBean.class).to(new NewsBean1ViewBinder(), new NewsBean2ViewBinder()

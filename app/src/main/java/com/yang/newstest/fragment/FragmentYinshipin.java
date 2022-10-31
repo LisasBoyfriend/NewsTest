@@ -8,6 +8,7 @@ import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.databinding.DataBindingUtil;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.DividerItemDecoration;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -23,6 +24,7 @@ import com.scwang.smart.refresh.layout.listener.OnLoadMoreListener;
 import com.scwang.smart.refresh.layout.listener.OnRefreshListener;
 import com.yang.newstest.R;
 import com.yang.newstest.bean.NewsBean;
+import com.yang.newstest.databinding.FragmentYinshipinBinding;
 import com.yang.newstest.helper.RetrofitHelper;
 import com.yang.newstest.itemviewbinder.HeaderViewBinder;
 import com.yang.newstest.itemviewbinder.NewsBean1ViewBinder;
@@ -40,9 +42,7 @@ import retrofit2.Retrofit;
 
 public class FragmentYinshipin extends Fragment {
     private static final String TAG = "FragmentYinpin";
-    private RecyclerView recyclerView;
     private MultiTypeAdapter adapter;
-    private SmartRefreshLayout mSmartRefreshLayout;
 //    private Banner banner;
     RetrofitHelper mHelper;
     Retrofit mRetrofit;
@@ -51,6 +51,8 @@ public class FragmentYinshipin extends Fragment {
     List<NewsBean.DocsBean.ListBean> mData = new ArrayList<>();
 //    NewsBean.DocsBean docsBean;
     List<Object> data = new ArrayList<>();
+
+    FragmentYinshipinBinding binding;
     public FragmentYinshipin(){
 
     }
@@ -65,26 +67,22 @@ public class FragmentYinshipin extends Fragment {
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.fragment_yinshipin, container, false);
-        initView(view);
+        binding = DataBindingUtil.inflate(inflater, R.layout.fragment_yinshipin, container, false);
+
         mHelper = new RetrofitHelper();
 
-        recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
+        binding.rvFraYinshipin.setLayoutManager(new LinearLayoutManager(getContext()));
         //添加Android自带的分割线
-        recyclerView.addItemDecoration(new DividerItemDecoration(getContext(), DividerItemDecoration.VERTICAL));
+        binding.rvFraYinshipin.addItemDecoration(new DividerItemDecoration(getContext(), DividerItemDecoration.VERTICAL));
         adapter = new MultiTypeAdapter();
         initAdapter(adapter);
-        recyclerView.setAdapter(adapter);
+        binding.rvFraYinshipin.setAdapter(adapter);
+        data.clear();
         data.addAll(mData);
         adapter.setItems(data);
         adapter.notifyDataSetChanged();
-        initSfl(mSmartRefreshLayout);
-        return view;
-    }
-
-    public void initView(View view) {
-        recyclerView = view.findViewById(R.id.rv_fra_yinshipin);
-        mSmartRefreshLayout = view.findViewById(R.id.sml);
+        initSfl(binding.sml);
+        return binding.getRoot();
     }
 
     public void initAdapter(MultiTypeAdapter adapter) {

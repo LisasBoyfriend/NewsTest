@@ -8,6 +8,7 @@ import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.databinding.DataBindingUtil;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -23,6 +24,7 @@ import com.scwang.smart.refresh.layout.listener.OnRefreshListener;
 import com.shuyu.gsyvideoplayer.GSYVideoManager;
 import com.yang.newstest.R;
 import com.yang.newstest.bean.NewsBean;
+import com.yang.newstest.databinding.FragmentWodeBinding;
 import com.yang.newstest.helper.RetrofitHelper;
 import com.yang.newstest.itemviewbinder.HeaderViewBinder;
 import com.yang.newstest.itemviewbinder.NewsBean1ViewBinder;
@@ -40,14 +42,13 @@ import retrofit2.Retrofit;
 
 public class FragmentWode extends Fragment {
     private static final String TAG = "FragmentZhuanTi";
-    private RecyclerView recyclerView;
     private MultiTypeAdapter adapter;
-    private SmartRefreshLayout mSmartRefreshLayout;
     RetrofitHelper mHelper;
     Retrofit mRetrofit;
     List<NewsBean.DocsBean.ListBean> mData = new ArrayList<>();
     //    NewsBean.DocsBean docsBean;
     List<Object> data = new ArrayList<>();
+    FragmentWodeBinding binding;
 
     int pageCount = 0;
     int pageNow = 0;
@@ -64,25 +65,21 @@ public class FragmentWode extends Fragment {
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.fragment_wode, container, false);
-        initView(view);
+        binding = DataBindingUtil.inflate(inflater, R.layout.fragment_wode, container, false);
         mHelper = new RetrofitHelper();
 
-        recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
+        binding.rvFraZhuanti.setLayoutManager(new LinearLayoutManager(getContext()));
         //添加Android自带的分割线
         adapter = new MultiTypeAdapter();
         initAdapter(adapter);
-        recyclerView.setAdapter(adapter);
+        binding.rvFraZhuanti.setAdapter(adapter);
         data.addAll(mData);
         adapter.setItems(data);
         adapter.notifyDataSetChanged();
-        initSfl(mSmartRefreshLayout);
-        return view;
+        initSfl(binding.sml);
+        return binding.getRoot();
     }
-    public void initView(View view) {
-        recyclerView = view.findViewById(R.id.rv_fra_zhuanti);
-        mSmartRefreshLayout = view.findViewById(R.id.sml);
-    }
+
 
 
     public void initAdapter(MultiTypeAdapter adapter) {
@@ -102,25 +99,6 @@ public class FragmentWode extends Fragment {
             }
         });
         adapter.register(NewsBean.DocsBean.class, new HeaderViewBinder(this));
-//        adapter.register(NewsBean.DocsBean.ListBean.class, new VideoViewBinder());
-    }
-
-    @Override
-    public void onPause() {
-        GSYVideoManager.onPause();
-        super.onPause();
-    }
-
-    @Override
-    public void onResume() {
-        super.onResume();
-        GSYVideoManager.onResume();
-    }
-
-    @Override
-    public void onDestroy() {
-        super.onDestroy();
-        GSYVideoManager.onResume();
     }
 
     public void initSfl(SmartRefreshLayout mSmartRefreshLayout) {

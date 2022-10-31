@@ -46,9 +46,7 @@ import retrofit2.Retrofit;
 public class MainActivity extends AppCompatActivity {
 
     private ActivityMainBinding dataBinding;
-    private ViewPager viewPager;
     private List<Fragment> fragments;
-    BottomNavigationView bottomNavigationView;
     //Retrofit获取网络
 
     List<NewsBean> allDataList = new ArrayList<>();
@@ -70,10 +68,9 @@ public class MainActivity extends AppCompatActivity {
         window.getDecorView().setSystemUiVisibility(View.SYSTEM_UI_FLAG_LAYOUT_STABLE | View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN);
         window.setStatusBarColor(Color.TRANSPARENT);
         dataBinding = DataBindingUtil.setContentView(this, R.layout.activity_main);
-        initView();
 
-        initBna(bottomNavigationView);
-        initViewPager(viewPager);
+        initBna(dataBinding.activityMainBna);
+        initViewPager(dataBinding.activityMainViewpager);
 
         mRetrofitHelper = new RetrofitHelper();
         requestDatas();
@@ -90,16 +87,16 @@ public class MainActivity extends AppCompatActivity {
             public boolean onNavigationItemSelected(@NonNull MenuItem item) {
                 switch (item.getItemId()) {
                     case R.id.bottom_nav_zixun:
-                        viewPager.setCurrentItem(0, false);
+                        dataBinding.activityMainViewpager.setCurrentItem(0, false);
                         break;
                     case R.id.bottom_nav_yinshipin:
-                        viewPager.setCurrentItem(1, false);
+                        dataBinding.activityMainViewpager.setCurrentItem(1, false);
                         break;
                     case R.id.bottom_nav_zhuanti:
-                        viewPager.setCurrentItem(2, false);
+                        dataBinding.activityMainViewpager.setCurrentItem(2, false);
                         break;
                     case R.id.bittom_nav_wode:
-                        viewPager.setCurrentItem(3, false);
+                        dataBinding.activityMainViewpager.setCurrentItem(3, false);
                         break;
                 }
                 return true;
@@ -107,10 +104,6 @@ public class MainActivity extends AppCompatActivity {
         });
     }
 
-    public void initView() {
-        viewPager = dataBinding.activityMainViewpager;
-        bottomNavigationView = dataBinding.activityMainBna;
-    }
 
     public void initFragmentData(List<Fragment> fragments) {
         fragments.add(new FragmentZixun(newsList, pageCountOfZixun));
@@ -128,7 +121,7 @@ public class MainActivity extends AppCompatActivity {
 
             @Override
             public void onPageSelected(int position) {
-                bottomNavigationView.getMenu().getItem(position).setChecked(true);
+                dataBinding.activityMainBna.getMenu().getItem(position).setChecked(true);
 
             }
 
@@ -178,7 +171,7 @@ public class MainActivity extends AppCompatActivity {
                         fragments = new ArrayList<>();
                         initFragmentData(fragments);
                         MainFraAdapter adapter = new MainFraAdapter(getSupportFragmentManager(), fragments);
-                        viewPager.setAdapter(adapter);
+                        dataBinding.activityMainViewpager.setAdapter(adapter);
 
                     }
                 }, new Consumer<Throwable>() {

@@ -38,8 +38,6 @@ import io.reactivex.functions.Consumer;
 import io.reactivex.schedulers.Schedulers;
 
 public class SplashActivity extends AppCompatActivity {
-    TextView tv_time;
-    FrameLayout layout_start_skip;
     ActivitySplashBinding binding;
     Disposable mDisposable;
 
@@ -67,7 +65,7 @@ public class SplashActivity extends AppCompatActivity {
 
                     @Override
                     public void onNext(Long value) {
-                        tv_time.setText(3 - value + "s 跳过");
+                        binding.tvStartSkipCountDown.setText(3 - value + "s 跳过");
                     }
 
                     @Override
@@ -84,10 +82,8 @@ public class SplashActivity extends AppCompatActivity {
     }
 
     private void initView() {
-        tv_time = binding.tvStartSkipCountDown;
 
-        layout_start_skip = binding.layoutStartSkip;
-        tv_time.setText("3" + getString(R.string.click_to_skip));
+        binding.tvStartSkipCountDown.setText("3" + getString(R.string.click_to_skip));
     }
 
     @Override

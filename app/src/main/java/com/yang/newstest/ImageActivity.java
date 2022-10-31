@@ -32,10 +32,6 @@ public class ImageActivity extends AppCompatActivity  {
     private int position;
     private int index = 0;
 
-
-    private PhotoView mPhotoView;
-    private ImageView iv_back;
-    private LinearLayout linearLayout;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -73,15 +69,12 @@ public class ImageActivity extends AppCompatActivity  {
     }
 
     private void initView() {
-        iv_back = binding.ivBack;
-        linearLayout = binding.layoutBack;
-        mPhotoView = binding.photoView;
-        mPhotoView.enable();
+        binding.photoView.enable();
         Glide.with(this)
                 .load(src)
                 .apply(GlideHelper.getImageActivityOptions())
                 .thumbnail(Glide.with(this).load(R.mipmap.loading2))
-                .into(mPhotoView);
+                .into(binding.photoView);
 
     }
 
@@ -90,10 +83,10 @@ public class ImageActivity extends AppCompatActivity  {
             finish();
             return;
         }else if (view == binding.photoView){
-            if (linearLayout.getVisibility() == View.INVISIBLE){
-                linearLayout.setVisibility(View.VISIBLE);
+            if (binding.layoutBack.getVisibility() == View.INVISIBLE){
+                binding.layoutBack.setVisibility(View.VISIBLE);
             }else {
-                linearLayout.setVisibility(View.INVISIBLE);
+                binding.layoutBack.setVisibility(View.INVISIBLE);
             }
         }
     }
@@ -102,10 +95,10 @@ public class ImageActivity extends AppCompatActivity  {
             finish();
         }
         public void setLayoutVisibility(View view){
-            if (linearLayout.getVisibility() == View.INVISIBLE){
-                linearLayout.setVisibility(View.VISIBLE);
+            if (binding.layoutBack.getVisibility() == View.INVISIBLE){
+                binding.layoutBack.setVisibility(View.VISIBLE);
             }else {
-                linearLayout.setVisibility(View.INVISIBLE);
+                binding.layoutBack.setVisibility(View.INVISIBLE);
             }
         }
     }
