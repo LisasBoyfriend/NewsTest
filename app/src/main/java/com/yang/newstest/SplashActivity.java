@@ -55,7 +55,7 @@ public class SplashActivity extends AppCompatActivity {
     protected void onResume() {
         super.onResume();
 
-        Observable.intervalRange(0, 3, 1, 1, TimeUnit.SECONDS)
+        Observable.intervalRange(0, 4, 0, 1, TimeUnit.SECONDS)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(new Observer<Long>() {

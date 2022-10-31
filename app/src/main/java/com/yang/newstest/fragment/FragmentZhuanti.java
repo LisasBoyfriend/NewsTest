@@ -21,6 +21,8 @@ import com.scwang.smart.refresh.layout.SmartRefreshLayout;
 import com.scwang.smart.refresh.layout.api.RefreshLayout;
 import com.scwang.smart.refresh.layout.listener.OnLoadMoreListener;
 import com.scwang.smart.refresh.layout.listener.OnRefreshListener;
+import com.shuyu.gsyvideoplayer.GSYVideoManager;
+import com.yang.newstest.MainActivity;
 import com.yang.newstest.R;
 import com.yang.newstest.bean.NewsBean;
 import com.yang.newstest.helper.RetrofitHelper;
@@ -29,6 +31,7 @@ import com.yang.newstest.itemviewbinder.NewsBean1ViewBinder;
 import com.yang.newstest.itemviewbinder.NewsBean2ViewBinder;
 import com.yang.newstest.itemviewbinder.NewsBean3ViewBinder;
 import com.yang.newstest.itemviewbinder.NewsBean4ViewBinder;
+import com.yang.newstest.itemviewbinder.VideoViewBinder;
 import com.yang.newstest.utils.URLUtils;
 import com.youth.banner.Banner;
 
@@ -47,19 +50,22 @@ public class FragmentZhuanti extends Fragment {
     Retrofit mRetrofit;
 
     List<NewsBean.DocsBean.ListBean> mData = new ArrayList<>();
-//    NewsBean.DocsBean docsBean;
+    //    NewsBean.DocsBean docsBean;
     List<Object> data = new ArrayList<>();
 
     int pageCount = 0;
     int pageNow = 0;
-    public FragmentZhuanti(){
+
+    public FragmentZhuanti() {
 
     }
-    public FragmentZhuanti(List<NewsBean.DocsBean.ListBean> data, int pageCount){
+
+    public FragmentZhuanti(List<NewsBean.DocsBean.ListBean> data, int pageCount) {
         this.mData = data;
         this.pageCount = pageCount;
         this.pageNow = this.pageCount;
     }
+
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
@@ -69,7 +75,6 @@ public class FragmentZhuanti extends Fragment {
 
         recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
         //添加Android自带的分割线
-        recyclerView.addItemDecoration(new DividerItemDecoration(getContext(),DividerItemDecoration.VERTICAL));
         adapter = new MultiTypeAdapter();
         initAdapter(adapter);
         recyclerView.setAdapter(adapter);
@@ -79,31 +84,78 @@ public class FragmentZhuanti extends Fragment {
         initSfl(mSmartRefreshLayout);
         return view;
     }
-    public void initView(View view){
-        recyclerView = view.findViewById(R.id.rv_fra_zhuanti);
-        mSmartRefreshLayout = view.findViewById(R.id.sml);
-    }
 
-    public void initAdapter(MultiTypeAdapter adapter){
-        adapter.register(NewsBean.DocsBean.ListBean.class).to(new NewsBean1ViewBinder(), new NewsBean2ViewBinder()
-                , new NewsBean3ViewBinder(), new NewsBean4ViewBinder()).withLinker(new Linker<NewsBean.DocsBean.ListBean>() {
+    public void initView(View view) {
+        recyclerView = view.findViewById(R.id.rv_fra_zhuanti);
+        recyclerView.setOnScrollListener(new RecyclerView.OnScrollListener() {
             @Override
-            public int index(int i, NewsBean.DocsBean.ListBean listBean) {
-                if (listBean.getListStyle().equals("1")){
-                    return 0;
-                }else if (listBean.getListStyle().equals("2")){
-                    return 1;
-                }else if (listBean.getListStyle().equals("3")){
-                    return 2;
-                }else {
-                    return 3;
+            public void onScrollStateChanged(@NonNull RecyclerView recyclerView, int newState) {
+                super.onScrollStateChanged(recyclerView, newState);
+            }
+
+            @Override
+            public void onScrolled(@NonNull RecyclerView recyclerView, int dx, int dy) {
+                int lastVisibleItem = dx + dy;
+                //大于0说明有播放
+                if (GSYVideoManager.instance().getPlayPosition() >= 0) {
+                    //当前播放的位置
+                    int position = GSYVideoManager.instance().getPlayPosition();
+                    //对应的播放列表TAG
+                    if (GSYVideoManager.instance().getPlayTag().equals(VideoViewBinder.TAG)
+                            && (position < dx || position > lastVisibleItem)) {
+                        if (GSYVideoManager.isFullState(getActivity())) {
+                            return;
+                        }
+                        //如果滑出去了上面和下面就是否，和今日头条一样
+                        GSYVideoManager.releaseAllVideos();
+                        adapter.notifyDataSetChanged();
+                    }
                 }
             }
         });
-        adapter.register(NewsBean.DocsBean.class, new HeaderViewBinder(this));
+        mSmartRefreshLayout = view.findViewById(R.id.sml);
     }
 
-    public void initSfl(SmartRefreshLayout mSmartRefreshLayout){
+
+    public void initAdapter(MultiTypeAdapter adapter) {
+//        adapter.register(NewsBean.DocsBean.ListBean.class).to(new NewsBean1ViewBinder(), new NewsBean2ViewBinder()
+//                , new NewsBean3ViewBinder(), new NewsBean4ViewBinder()).withLinker(new Linker<NewsBean.DocsBean.ListBean>() {
+//            @Override
+//            public int index(int i, NewsBean.DocsBean.ListBean listBean) {
+//                if (listBean.getListStyle().equals("1")){
+//                    return 0;
+//                }else if (listBean.getListStyle().equals("2")){
+//                    return 1;
+//                }else if (listBean.getListStyle().equals("3")){
+//                    return 2;
+//                }else {
+//                    return 3;
+//                }
+//            }
+//        });
+//        adapter.register(NewsBean.DocsBean.class, new HeaderViewBinder(this));
+        adapter.register(NewsBean.DocsBean.ListBean.class, new VideoViewBinder());
+    }
+
+    @Override
+    public void onPause() {
+        GSYVideoManager.onPause();
+        super.onPause();
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        GSYVideoManager.onResume();
+    }
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        GSYVideoManager.onResume();
+    }
+
+    public void initSfl(SmartRefreshLayout mSmartRefreshLayout) {
         mSmartRefreshLayout.setRefreshHeader(new MaterialHeader(getContext()).setShowBezierWave(true));
         mSmartRefreshLayout.setRefreshFooter(new ClassicsFooter(getContext()));
         mSmartRefreshLayout.setOnRefreshListener(new OnRefreshListener() {
@@ -121,7 +173,7 @@ public class FragmentZhuanti extends Fragment {
             @Override
             public void onLoadMore(@NonNull RefreshLayout refreshLayout) {
 
-                if (pageNow > 0){
+                if (pageNow > 0) {
                     pageNow--;
                 }
                 requestLoadMore();//需要分页，这里需要重构url
@@ -129,6 +181,7 @@ public class FragmentZhuanti extends Fragment {
             }
         });
     }
+
     private void requestRefresh() {
 
         //Retrofit+RxJava框架
@@ -150,6 +203,7 @@ public class FragmentZhuanti extends Fragment {
             }
         });
     }
+
     private void requestLoadMore() {
         String pageStr = "index_" + pageNow + ".json";
         //Retrofit+RxJava框架

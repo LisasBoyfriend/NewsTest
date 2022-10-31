@@ -43,12 +43,12 @@
                 android:id="@+id/iv_hearing"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:src="@drawable/ic_hearing_24"
+
                 android:layout_centerInParent="true"
                 android:onClick="onClick"
                 android:layout_marginRight="10dp"
                 android:layout_toLeftOf="@id/iv_more" />
-
+<!--            android:src="@drawable/ic_hearing_24"-->
         </RelativeLayout>
 
         <ProgressBar

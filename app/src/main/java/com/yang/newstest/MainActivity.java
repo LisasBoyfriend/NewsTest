@@ -17,6 +17,7 @@ import android.view.Window;
 import android.widget.Toast;
 
 import com.google.android.material.bottomnavigation.BottomNavigationView;
+import com.shuyu.gsyvideoplayer.GSYVideoManager;
 import com.yang.newstest.adapter.MainFraAdapter;
 import com.yang.newstest.bean.NewsBean;
 import com.yang.newstest.databinding.ActivityMainBinding;
@@ -115,7 +116,7 @@ public class MainActivity extends AppCompatActivity {
         fragments.add(new FragmentZixun(newsList, pageCountOfZixun));
         fragments.add(new FragmentYinshipin(yinpinList, pageCountOfYinpin));
         fragments.add(new FragmentZhuanti(shipinList, pageCountOfShipin));
-        fragments.add(new FragmentWode());
+        fragments.add(new FragmentWode(shipinList, pageCountOfShipin));
     }
 
     public void initViewPager(ViewPager viewPager) {
@@ -189,4 +190,11 @@ public class MainActivity extends AppCompatActivity {
                 });
     }
 
+    @Override
+    public void onBackPressed() {
+        super.onBackPressed();
+        if (GSYVideoManager.backFromWindowFull(this)) {
+            return;
+        }
+    }
 }
