@@ -1,13 +1,9 @@
 package com.yang.newstest.helper;
 
-import android.util.Log;
-
 import com.jakewharton.retrofit2.adapter.rxjava2.RxJava2CallAdapterFactory;
 import com.yang.newstest.bean.NewsBean;
 import com.yang.newstest.helper.requestImpl.GetZixunRequest;
 
-import java.util.ArrayList;
-import java.util.List;
 
 import io.reactivex.Flowable;
 import io.reactivex.android.schedulers.AndroidSchedulers;

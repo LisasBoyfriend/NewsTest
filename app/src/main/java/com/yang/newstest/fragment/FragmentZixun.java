@@ -1,7 +1,6 @@
 package com.yang.newstest.fragment;
 
 import android.os.Bundle;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -13,7 +12,6 @@ import androidx.databinding.DataBindingUtil;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.DividerItemDecoration;
 import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
 
 import com.drakeet.multitype.Linker;
 import com.drakeet.multitype.MultiTypeAdapter;
@@ -24,31 +22,20 @@ import com.scwang.smart.refresh.layout.api.RefreshLayout;
 import com.scwang.smart.refresh.layout.listener.OnLoadMoreListener;
 import com.scwang.smart.refresh.layout.listener.OnRefreshListener;
 import com.yang.newstest.R;
-import com.yang.newstest.adapter.ImageBannerAdapter;
 import com.yang.newstest.bean.NewsBean;
 import com.yang.newstest.databinding.FragmentZixunBinding;
-import com.yang.newstest.helper.InterceptorOKHttpClient;
 import com.yang.newstest.helper.RetrofitHelper;
-import com.yang.newstest.helper.requestImpl.GetZixunRequest;
 import com.yang.newstest.itemviewbinder.HeaderViewBinder;
 import com.yang.newstest.itemviewbinder.NewsBean1ViewBinder;
 import com.yang.newstest.itemviewbinder.NewsBean2ViewBinder;
 import com.yang.newstest.itemviewbinder.NewsBean3ViewBinder;
 import com.yang.newstest.itemviewbinder.NewsBean4ViewBinder;
 import com.yang.newstest.utils.URLUtils;
-import com.youth.banner.Banner;
-import com.youth.banner.indicator.CircleIndicator;
-
 import java.util.ArrayList;
 import java.util.List;
 
 import io.reactivex.functions.Consumer;
-import okhttp3.OkHttpClient;
-import retrofit2.Call;
-import retrofit2.Callback;
-import retrofit2.Response;
 import retrofit2.Retrofit;
-import retrofit2.converter.gson.GsonConverterFactory;
 
 public class FragmentZixun extends Fragment{
 

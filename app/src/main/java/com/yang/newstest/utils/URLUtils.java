@@ -1,6 +1,5 @@
 package com.yang.newstest.utils;
 
-import android.os.Message;
 import android.util.Log;
 
 import java.io.InputStream;

@@ -7,21 +7,15 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
-import android.view.MotionEvent;
 import android.view.View;
 import android.widget.ImageSwitcher;
-import android.widget.ImageView;
-import android.widget.LinearLayout;
-import android.widget.ViewSwitcher;
 
-import com.bm.library.PhotoView;
 import com.bumptech.glide.Glide;
 import com.yang.newstest.databinding.ActivityImageBinding;
 import com.yang.newstest.helper.GlideHelper;
 
 import java.util.ArrayList;
 import java.util.HashSet;
-import java.util.List;
 
 public class ImageActivity extends AppCompatActivity  {
 

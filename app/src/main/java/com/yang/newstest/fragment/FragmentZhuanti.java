@@ -14,7 +14,6 @@ import androidx.recyclerview.widget.DividerItemDecoration;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.drakeet.multitype.Linker;
 import com.drakeet.multitype.MultiTypeAdapter;
 import com.scwang.smart.refresh.footer.ClassicsFooter;
 import com.scwang.smart.refresh.header.MaterialHeader;
@@ -23,19 +22,12 @@ import com.scwang.smart.refresh.layout.api.RefreshLayout;
 import com.scwang.smart.refresh.layout.listener.OnLoadMoreListener;
 import com.scwang.smart.refresh.layout.listener.OnRefreshListener;
 import com.shuyu.gsyvideoplayer.GSYVideoManager;
-import com.yang.newstest.MainActivity;
 import com.yang.newstest.R;
 import com.yang.newstest.bean.NewsBean;
 import com.yang.newstest.databinding.FragmentZhuantiBinding;
 import com.yang.newstest.helper.RetrofitHelper;
-import com.yang.newstest.itemviewbinder.HeaderViewBinder;
-import com.yang.newstest.itemviewbinder.NewsBean1ViewBinder;
-import com.yang.newstest.itemviewbinder.NewsBean2ViewBinder;
-import com.yang.newstest.itemviewbinder.NewsBean3ViewBinder;
-import com.yang.newstest.itemviewbinder.NewsBean4ViewBinder;
 import com.yang.newstest.itemviewbinder.VideoViewBinder;
 import com.yang.newstest.utils.URLUtils;
-import com.youth.banner.Banner;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -77,6 +69,8 @@ public class FragmentZhuanti extends Fragment {
 
         binding.rvFraZhuanti.setLayoutManager(new LinearLayoutManager(getContext()));
         //添加Android自带的分割线
+        binding.rvFraZhuanti.addItemDecoration(new DividerItemDecoration(getContext(),DividerItemDecoration.VERTICAL));
+
         adapter = new MultiTypeAdapter();
         initAdapter(adapter);
         binding.rvFraZhuanti.setAdapter(adapter);

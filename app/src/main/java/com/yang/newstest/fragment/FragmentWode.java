@@ -11,7 +11,6 @@ import androidx.annotation.Nullable;
 import androidx.databinding.DataBindingUtil;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
 
 import com.drakeet.multitype.Linker;
 import com.drakeet.multitype.MultiTypeAdapter;
@@ -21,7 +20,6 @@ import com.scwang.smart.refresh.layout.SmartRefreshLayout;
 import com.scwang.smart.refresh.layout.api.RefreshLayout;
 import com.scwang.smart.refresh.layout.listener.OnLoadMoreListener;
 import com.scwang.smart.refresh.layout.listener.OnRefreshListener;
-import com.shuyu.gsyvideoplayer.GSYVideoManager;
 import com.yang.newstest.R;
 import com.yang.newstest.bean.NewsBean;
 import com.yang.newstest.databinding.FragmentWodeBinding;
@@ -31,7 +29,6 @@ import com.yang.newstest.itemviewbinder.NewsBean1ViewBinder;
 import com.yang.newstest.itemviewbinder.NewsBean2ViewBinder;
 import com.yang.newstest.itemviewbinder.NewsBean3ViewBinder;
 import com.yang.newstest.itemviewbinder.NewsBean4ViewBinder;
-import com.yang.newstest.itemviewbinder.VideoViewBinder;
 import com.yang.newstest.utils.URLUtils;
 
 import java.util.ArrayList;

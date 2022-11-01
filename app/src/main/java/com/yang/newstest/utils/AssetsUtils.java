@@ -4,7 +4,6 @@ import android.content.Context;
 import android.content.res.AssetManager;
 
 import java.io.ByteArrayOutputStream;
-import java.io.File;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 

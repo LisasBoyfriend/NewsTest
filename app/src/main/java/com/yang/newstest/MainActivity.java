@@ -3,14 +3,12 @@ package com.yang.newstest;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.databinding.DataBindingUtil;
-import androidx.databinding.ViewDataBinding;
 import androidx.fragment.app.Fragment;
 import androidx.viewpager.widget.ViewPager;
 
 import android.graphics.Color;
 import android.os.Bundle;
 
-import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.Window;
@@ -30,7 +28,6 @@ import com.yang.newstest.helper.requestImpl.GetZixunRequest;
 import com.yang.newstest.utils.URLUtils;
 
 
-import org.reactivestreams.Publisher;
 
 import java.util.ArrayList;
 import java.util.List;

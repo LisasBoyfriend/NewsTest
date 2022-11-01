@@ -22,6 +22,7 @@ public class VideoViewBinder extends BaseViewBinder<NewsBean.DocsBean.ListBean, 
 
     @Override
     public void onBindViewHolder(@NonNull BaseViewHolder<ItemVideoBinding> itemVideoBindingBaseViewHolder, NewsBean.DocsBean.ListBean listBean) {
+        itemVideoBindingBaseViewHolder.getBinding().tvVideoTitle.setText(listBean.getDocTitle());
         GSYVideoPlayer player = itemVideoBindingBaseViewHolder.getBinding().gsyPlayer;
         ImageView imageView = new ImageView(player.getContext());
         loadCover(imageView, listBean.getImgUrls().get(0));
