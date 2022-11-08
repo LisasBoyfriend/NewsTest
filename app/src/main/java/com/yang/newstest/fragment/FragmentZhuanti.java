@@ -164,44 +164,30 @@ public class FragmentZhuanti extends Fragment {
 
         //Retrofit+RxJava框架
         mRetrofit = mHelper.getRetrofit(URLUtils.BASE_URL);
-        mHelper.makeRequest(URLUtils.PATH_FOR_YINSHIPIN_SHIPIN, "", mRetrofit, new Consumer<NewsBean>() {
-            @Override
-            public void accept(NewsBean newsBean) throws Exception {
+        mHelper.makeRequest(URLUtils.PATH_FOR_YINSHIPIN_SHIPIN, "", mRetrofit, newsBean -> {
 
-                List<NewsBean.DocsBean.ListBean> list = newsBean.getDocs().getList();
-                data.clear();
+            List<NewsBean.DocsBean.ListBean> list = newsBean.getDocs().getList();
+            data.clear();
 //                data.add(docsBean);
-                data.addAll(list);
-                adapter.notifyDataSetChanged();
-            }
-        }, new Consumer<Throwable>() {
-            @Override
-            public void accept(Throwable throwable) throws Exception {
-                Toast.makeText(getContext(), "请检查网络设置", Toast.LENGTH_SHORT).show();
-            }
-        });
+            data.addAll(list);
+            adapter.notifyDataSetChanged();
+        }, throwable -> Toast.makeText(getContext(), "请检查网络设置", Toast.LENGTH_SHORT).show());
     }
 
     private void requestLoadMore() {
         String pageStr = "index_" + pageNow + ".json";
         //Retrofit+RxJava框架
         mRetrofit = mHelper.getRetrofit(URLUtils.BASE_URL);
-        mHelper.makeRequest(URLUtils.PATH_FOR_YINSHIPIN_SHIPIN, pageStr, mRetrofit, new Consumer<NewsBean>() {
-            @Override
-            public void accept(NewsBean newsBean) throws Exception {
+        mHelper.makeRequest(URLUtils.PATH_FOR_YINSHIPIN_SHIPIN, pageStr, mRetrofit, newsBean -> {
 
-                List<NewsBean.DocsBean.ListBean> list = newsBean.getDocs().getList();
-                data.addAll(list);
-                adapter.notifyItemRangeChanged(data.size() - list.size(), list.size());
-            }
-        }, new Consumer<Throwable>() {
-            @Override
-            public void accept(Throwable throwable) throws Exception {
-                if (pageNow == 0) {
-                    Toast.makeText(getContext(), "已经到底啦", Toast.LENGTH_SHORT).show();
-                } else {
-                    Toast.makeText(getContext(), "请检查网络设置", Toast.LENGTH_SHORT).show();
-                }
+            List<NewsBean.DocsBean.ListBean> list = newsBean.getDocs().getList();
+            data.addAll(list);
+            adapter.notifyItemRangeChanged(data.size() - list.size(), list.size());
+        }, throwable -> {
+            if (pageNow == 0) {
+                Toast.makeText(getContext(), "已经到底啦", Toast.LENGTH_SHORT).show();
+            } else {
+                Toast.makeText(getContext(), "请检查网络设置", Toast.LENGTH_SHORT).show();
             }
         });
     }
