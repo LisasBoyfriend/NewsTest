@@ -12,9 +12,9 @@
         <entry key="..\:/AndroidWorkspace/NewsTest/app/src/main/res/drawable/tv_splash.xml" value="0.253125" />
         <entry key="..\:/AndroidWorkspace/NewsTest/app/src/main/res/layout/activity_detail.xml" value="0.176" />
         <entry key="..\:/AndroidWorkspace/NewsTest/app/src/main/res/layout/activity_image.xml" value="0.1" />
-        <entry key="..\:/AndroidWorkspace/NewsTest/app/src/main/res/layout/activity_main.xml" value="0.22418478260869565" />
+        <entry key="..\:/AndroidWorkspace/NewsTest/app/src/main/res/layout/activity_main.xml" value="0.2" />
         <entry key="..\:/AndroidWorkspace/NewsTest/app/src/main/res/layout/activity_splash.xml" value="0.4" />
-        <entry key="..\:/AndroidWorkspace/NewsTest/app/src/main/res/layout/banner.xml" value="0.4" />
+        <entry key="..\:/AndroidWorkspace/NewsTest/app/src/main/res/layout/banner.xml" value="0.152" />
         <entry key="..\:/AndroidWorkspace/NewsTest/app/src/main/res/layout/dialog_font_size.xml" value="0.264" />
         <entry key="..\:/AndroidWorkspace/NewsTest/app/src/main/res/layout/fragment_wode.xml" value="0.11927083333333334" />
         <entry key="..\:/AndroidWorkspace/NewsTest/app/src/main/res/layout/fragment_yinshipin.xml" value="0.11927083333333334" />
@@ -31,7 +31,7 @@
       </map>
     </option>
   </component>
-  <component name="ProjectRootManager" version="2" languageLevel="JDK_11" default="true" project-jdk-name="1.8" project-jdk-type="JavaSDK">
+  <component name="ProjectRootManager" version="2" languageLevel="JDK_11" project-jdk-name="1.8" project-jdk-type="JavaSDK">
     <output url="file://$PROJECT_DIR$/build/classes" />
   </component>
   <component name="ProjectType">

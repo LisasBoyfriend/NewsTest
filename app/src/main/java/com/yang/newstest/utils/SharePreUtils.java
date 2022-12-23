@@ -50,6 +50,6 @@ public class SharePreUtils {
     public static void removeInfoFromSP(String key, SharedPreferences sp){
         SharedPreferences.Editor edit = sp.edit();
         edit.remove(key);
-        edit.commit();
+        edit.apply();
     }
 }

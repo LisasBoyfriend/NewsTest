@@ -11,6 +11,7 @@ import com.yang.newstest.bean.NewsBean;
 import com.yang.newstest.databinding.ItemHeaderBinding;
 import com.youth.banner.indicator.RectangleIndicator;
 import com.youth.banner.transformer.DepthPageTransformer;
+import com.youth.banner.transformer.ScaleInTransformer;
 
 
 public class HeaderViewBinder extends BaseViewBinder<NewsBean.DocsBean, ItemHeaderBinding> {
@@ -32,8 +33,9 @@ public class HeaderViewBinder extends BaseViewBinder<NewsBean.DocsBean, ItemHead
         binding.banner.setAdapter(new ImageBannerAdapter(docsBean.getFocuses()));
         binding.banner.setIndicator(new RectangleIndicator(fragment.getActivity()));
         binding.banner.addBannerLifecycleObserver(fragment);
-        binding.banner.setBannerRound(20);
-        binding.banner.setPageTransformer(new DepthPageTransformer());
+        binding.banner.setBannerRound(5);
+        binding.banner.setScrollTime(1000);
+        binding.banner.setPageTransformer(new ScaleInTransformer());
         binding.banner.start();
     }
 
