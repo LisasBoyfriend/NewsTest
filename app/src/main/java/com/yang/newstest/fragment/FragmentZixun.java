@@ -46,6 +46,7 @@ public class FragmentZixun extends Fragment{
     FragmentZixunBinding binding;
 
     private int a = 0;
+    private int b =2;
     List<NewsBean.DocsBean.ListBean> mData = new ArrayList<>();
     NewsBean.DocsBean docsBean;
     List<Object> data = new ArrayList<>();
