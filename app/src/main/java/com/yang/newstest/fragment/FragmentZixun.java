@@ -45,7 +45,7 @@ public class FragmentZixun extends Fragment{
     Retrofit mRetrofit;
     FragmentZixunBinding binding;
 
-    private int a = 0;
+    private int a = 3;
     private int b =2;
     List<NewsBean.DocsBean.ListBean> mData = new ArrayList<>();
     NewsBean.DocsBean docsBean;
